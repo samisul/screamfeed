@@ -6,9 +6,9 @@
 
 <svelte:head>
 	{#if $isLoggedIn}
-		<title>pore | welcome</title>
+		<title>screamfeed | welcome</title>
 	{:else}
-		<title>pore | authenticate</title>
+		<title>screamfeed | authenticate</title>
 	{/if}
 </svelte:head>
 

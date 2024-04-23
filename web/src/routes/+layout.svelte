@@ -1,11 +1,14 @@
 <script>
 	import '../app.postcss';
+	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
 
 	import { isLoggedIn } from '../stores/auth.store';
 </script>
 
-<div>huh</div>
-
+<AppBar background="bg-transparent">
+	<svelte:fragment slot="lead"><span>screamfeed</span></svelte:fragment>
+	<svelte:fragment slot="trail">(actions)</svelte:fragment>
+</AppBar>
 <!-- <Navbar color="none"> -->
 <!-- 	<NavBrand href="/"> -->
 <!-- 		<span -->
