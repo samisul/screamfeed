@@ -1,4 +1,6 @@
 <script>
+	import '../app.postcss';
+
 	import { isLoggedIn } from '../stores/auth.store';
 </script>
 
