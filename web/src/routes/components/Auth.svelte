@@ -1,5 +1,6 @@
 <script>
 	import { navigateToGoogleOAuth, login, navigateToGithubOAuth } from '$lib/auth';
+	import { GithubSolid, GoogleSolid } from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
@@ -15,9 +16,13 @@
 	}
 </script>
 
-<div class="w-full lg:p-4">
-	<button type="button" class="btn filled-primary text-red-900 bg-white">
-		<span>(icon)</span>
+<div class="lg:p-4 flex flex-col gap-4 items-center">
+	<button type="button" class="btn variant-filled-primary" on:click={onNavToGithub}>
+		<GithubSolid></GithubSolid>
 		<span>continue with GitHub</span>
+	</button>
+	<button type="button" class="btn variant-filled-primary" on:click={onNavToGoogle}>
+		<GoogleSolid></GoogleSolid>
+		<span>continue with Google</span>
 	</button>
 </div>

@@ -5,7 +5,7 @@ import { isLoggedIn } from '../../stores/auth.store';
 import type { AuthCookie } from './models';
 
 const TOKEN_KEY = 'PORE_TOKENS';
-const AUTH_URL = `${env.baseUrl}/auth`;
+const AUTH_URL = `${env.baseUrl}/user`;
 
 export function navigateToGithubOAuth(): void {
 	window.location.href = AUTH_URL + '/github';
