@@ -4,7 +4,7 @@ import { get } from '$lib/http';
 import { isLoggedIn } from '../../stores/auth.store';
 import type { AuthCookie } from './models';
 
-const TOKEN_KEY = 'PORE_TOKENS';
+const TOKEN_KEY = 'SCREAMFEED_TOKENS';
 const AUTH_URL = `${env.baseUrl}/user`;
 
 export function navigateToGithubOAuth(): void {
