@@ -29,7 +29,7 @@ export interface RSSFeed {
 export interface RSSFeedItem {
   title: string;
   link: string;
-  description: string;
+  content: string;
   pubDate: string;
   guid: string;
 }
@@ -45,7 +45,7 @@ export interface AtomFeed {
 
 export interface AtomFeedEntry {
   title: string;
-  link: { href: string }[];
+  link: string;
   id: string;
   updated: string;
   summary: string;
@@ -63,7 +63,7 @@ export interface GenericFeed {
 export interface GenericFeedItem {
   id: string;
   title: string;
-  link: string[];
+  link: string;
   content: string;
   data: string;
 }

@@ -61,7 +61,7 @@ export class FeedMappers {
     return {
       title: item.title,
       link: item.link,
-      description: item.description,
+      content: item['content:encoded'],
       pubDate: item.pubDate,
       guid: item.guid,
     };
@@ -73,7 +73,7 @@ export class FeedMappers {
       link: entry.link,
       id: entry.id,
       updated: entry.updated,
-      summary: entry.summary,
+      summary: entry.content ?? entry.summary,
     };
   }
 
@@ -83,8 +83,8 @@ export class FeedMappers {
     return {
       id: item.guid,
       title: item.title,
-      link: [item.link],
-      content: item.description,
+      link: item.link,
+      content: item.content,
       data: item.pubDate,
     };
   }
@@ -95,10 +95,7 @@ export class FeedMappers {
     return {
       id: entry.id,
       title: entry.title,
-      link:
-        typeof entry.link === 'string'
-          ? entry.link
-          : entry.link?.map((l) => l.href),
+      link: entry.link,
       content: entry.summary,
       data: entry.updated,
     };

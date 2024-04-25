@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  OnModuleInit,
   Param,
   Post,
   Req,
@@ -15,8 +16,13 @@ import { AddFeedReq } from './feed.model';
 
 @UseGuards(LoggedInGuard)
 @Controller('feed')
-export class FeedController {
+export class FeedController implements OnModuleInit {
   constructor(private readonly feedService: FeedService) {}
+  async onModuleInit() {
+    await this.feedService.getParsedFeedsFromURLs([
+      'https://thelinuxcast.org/feed/feed.xml',
+    ]);
+  }
 
   @Get()
   async getUserFeeds(@Req() req: Request & { user: JwtPayload }) {

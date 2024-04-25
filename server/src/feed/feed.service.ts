@@ -68,19 +68,6 @@ export class FeedService {
       .map((f) => FeedMappers.toGenericFeed(f));
   }
 
-  private async getParsedFeedFromURL(
-    feedURL: string,
-  ): Promise<FeedRes | undefined> {
-    const _feed = await this.getFeedFromURL(feedURL);
-    if (!_feed) return undefined;
-    const _parsedFeed = this.parser.parse(_feed);
-    if (this.isRSSFeed(_parsedFeed))
-      return { type: 'rss', feed: FeedMappers.toRSSFeed(_parsedFeed) };
-    if (this.isAtomFeed(_parsedFeed))
-      return { type: 'atom', feed: FeedMappers.toAtomFeed(_parsedFeed) };
-    return undefined;
-  }
-
   private async getFeedsFromURLs(feedURLs: string[]): Promise<string[]> {
     return (
       await Promise.all(
