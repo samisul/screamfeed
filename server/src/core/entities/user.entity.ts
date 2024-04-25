@@ -3,9 +3,11 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Feed } from './feed.entity';
+import { Mark } from './mark.entity';
 
 @Entity()
 export class User {
@@ -24,6 +26,9 @@ export class User {
   @JoinTable()
   @ManyToMany(() => Feed, (feed) => feed.users)
   feeds: Feed[];
+
+  @OneToMany(() => Mark, (mark) => mark.user)
+  marks: Mark[];
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
