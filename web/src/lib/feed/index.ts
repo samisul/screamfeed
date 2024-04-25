@@ -6,11 +6,11 @@ import { toRSSFeed, toAtomFeed, toGenericFeed } from './mappers';
 const parser = new XMLParser();
 
 export async function getParsedFeedsFromURLs(feedURLs: string[]): Promise<GenericFeed[]> {
-  const _feeds = await getFeedsFromURLs(feedURLs);
-  return (await Promise.all(_feeds.map(async (_feed) => await parser.parse(_feed))))
+  return (await getFeedsFromURLs(feedURLs))
     .map((feed) => {
-      if (isRSSFeed(feed)) return { type: 'rss', feed: toRSSFeed(feed) };
-      if (isAtomFeed(feed)) return { type: 'atom', feed: toAtomFeed(feed) };
+      const _parsedFeed = parser.parse(feed);
+      if (isRSSFeed(_parsedFeed)) return { type: 'rss', feed: toRSSFeed(_parsedFeed) };
+      if (isAtomFeed(_parsedFeed)) return { type: 'atom', feed: toAtomFeed(_parsedFeed) };
       return undefined;
     })
     .filter((f): f is FeedRes => !!f)
@@ -33,7 +33,7 @@ async function getFeedsFromURLs(feedURLs: string[]): Promise<string[]> {
 }
 
 async function getFeedFromURL(feedURL: string): Promise<string | undefined> {
-  const _res = await axios.get<string>(feedURL);
+  const _res = await axios.get<string>(feedURL, { headers: { Accept: 'text' } });
   if (_res.status !== 200) return undefined;
   if (!validateFeed(_res.data)) return undefined;
   return _res.data;

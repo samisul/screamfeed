@@ -86,7 +86,7 @@ function atomFeedEntryToGenericFeedItem(entry: AtomFeedEntry): GenericFeedItem {
   return {
     id: entry.id,
     title: entry.title,
-    link: entry.link.map((l) => l.href),
+    link: typeof entry.link === 'string' ? entry.link : entry.link?.map((l) => l.href),
     content: entry.summary,
     data: entry.updated
   };
