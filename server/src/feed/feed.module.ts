@@ -5,10 +5,9 @@ import { DataModule } from 'src/data/data.module';
 import { Feed } from 'src/core/entities/feed.entity';
 import { User } from 'src/core/entities/user.entity';
 import { HttpModule } from '@nestjs/axios';
-import { Mark } from 'src/core/entities/mark.entity';
 
 @Module({
-  imports: [HttpModule, DataModule.forFeature([Feed, Mark, User])],
+  imports: [HttpModule, DataModule.forFeature([Feed, User])],
   controllers: [FeedController],
   providers: [FeedService],
   exports: [],

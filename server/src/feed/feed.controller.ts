@@ -15,7 +15,7 @@ import { JwtPayload } from 'src/core/auth.model';
 import { AddFeedReq } from './feed.model';
 
 @UseGuards(LoggedInGuard)
-@Controller('feed')
+@Controller('feeds')
 export class FeedController implements OnModuleInit {
   constructor(private readonly feedService: FeedService) {}
   async onModuleInit() {

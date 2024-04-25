@@ -5,16 +5,19 @@ import { SeedService } from './data/seed/seed.service';
 import { env } from 'process';
 import { UserModule } from './user/user.module';
 import { FeedModule } from './feed/feed.module';
+import { MarkModule } from './mark/mark.module';
 
 @Module({
   imports: [
     UserModule,
     FeedModule,
+    MarkModule,
     DataModule.forRoot(),
     ConfigModule.forRoot({
       envFilePath: env['NODE_ENV'] === 'dev' ? '.env.local' : '.env',
       isGlobal: true,
     }),
+    MarkModule,
   ],
   controllers: [],
   providers: [SeedService, Logger],
