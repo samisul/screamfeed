@@ -47,6 +47,8 @@
   "type": "module",
   "dependencies": {
     "@floating-ui/dom": "1.6.3",
+    "axios": "^1.6.8",
+    "fast-xml-parser": "^4.3.6",
     "highlight.js": "11.9.0"
   }
 }
