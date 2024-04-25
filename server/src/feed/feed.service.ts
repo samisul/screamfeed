@@ -68,7 +68,9 @@ export class FeedService {
       .map((f) => FeedMappers.toGenericFeed(f));
   }
 
-  async getParsedFeedFromURL(feedURL: string): Promise<FeedRes | undefined> {
+  private async getParsedFeedFromURL(
+    feedURL: string,
+  ): Promise<FeedRes | undefined> {
     const _feed = await this.getFeedFromURL(feedURL);
     if (!_feed) return undefined;
     const _parsedFeed = this.parser.parse(_feed);
@@ -79,7 +81,7 @@ export class FeedService {
     return undefined;
   }
 
-  async getFeedsFromURLs(feedURLs: string[]): Promise<string[]> {
+  private async getFeedsFromURLs(feedURLs: string[]): Promise<string[]> {
     return (
       await Promise.all(
         feedURLs.map(async (feedURL) => await this.getFeedFromURL(feedURL)),
@@ -87,22 +89,22 @@ export class FeedService {
     ).filter((f): f is string => !!f);
   }
 
-  async getFeedFromURL(feedURL: string): Promise<string | undefined> {
+  private async getFeedFromURL(feedURL: string): Promise<string | undefined> {
     const _res = await firstValueFrom(this.httpService.get<string>(feedURL));
     if (_res.status !== 200) return undefined;
     if (!this.validateFeed(_res.data)) return undefined;
     return _res.data;
   }
 
-  validateFeed(feed: string): boolean {
+  private validateFeed(feed: string): boolean {
     return XMLValidator.validate(feed) === true ? true : false;
   }
 
-  isRSSFeed(feed: any): feed is RSSFeed {
+  private isRSSFeed(feed: any): feed is RSSFeed {
     return 'rss' in feed;
   }
 
-  isAtomFeed(feed: any): feed is AtomFeed {
+  private isAtomFeed(feed: any): feed is AtomFeed {
     return 'feed' in feed;
   }
 }
