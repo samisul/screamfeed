@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { logout } from '$lib/auth';
-	import { onMount } from 'svelte';
+  import { logout } from '$lib/auth';
+  import { onMount } from 'svelte';
 
-	onMount(async () => {});
+  onMount(async () => {});
 </script>
 
 <div class="lg:p-4">TO BE IMPLEMENTED</div>
