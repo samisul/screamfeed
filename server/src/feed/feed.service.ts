@@ -1,14 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { Feed } from 'src/core/entities/feed.entity';
 import { User } from 'src/core/entities/user.entity';
 import { Repository } from 'typeorm';
+import { GenericFeed, FeedRes, RSSFeed, AtomFeed } from './feed.model';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+import { FeedMappers } from './feed.mappers';
 
 @Injectable()
 export class FeedService {
+  private readonly parser = new XMLParser();
+
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Feed) private readonly feedRepo: Repository<Feed>,
+    private readonly httpService: HttpService,
   ) {}
 
   async add(feedURL: string, userId: string): Promise<Feed | undefined> {
@@ -44,5 +52,57 @@ export class FeedService {
     if (!user) return [];
 
     return await this.feedRepo.find({ where: { users: { id: user.id } } });
+  }
+
+  async getParsedFeedsFromURLs(feedURLs: string[]): Promise<GenericFeed[]> {
+    return (await this.getFeedsFromURLs(feedURLs))
+      .map((feed) => {
+        const _parsedFeed = this.parser.parse(feed);
+        if (this.isRSSFeed(_parsedFeed))
+          return { type: 'rss', feed: FeedMappers.toRSSFeed(_parsedFeed) };
+        if (this.isAtomFeed(_parsedFeed))
+          return { type: 'atom', feed: FeedMappers.toAtomFeed(_parsedFeed) };
+        return undefined;
+      })
+      .filter((f): f is FeedRes => !!f)
+      .map((f) => FeedMappers.toGenericFeed(f));
+  }
+
+  async getParsedFeedFromURL(feedURL: string): Promise<FeedRes | undefined> {
+    const _feed = await this.getFeedFromURL(feedURL);
+    if (!_feed) return undefined;
+    const _parsedFeed = this.parser.parse(_feed);
+    if (this.isRSSFeed(_parsedFeed))
+      return { type: 'rss', feed: FeedMappers.toRSSFeed(_parsedFeed) };
+    if (this.isAtomFeed(_parsedFeed))
+      return { type: 'atom', feed: FeedMappers.toAtomFeed(_parsedFeed) };
+    return undefined;
+  }
+
+  async getFeedsFromURLs(feedURLs: string[]): Promise<string[]> {
+    return (
+      await Promise.all(
+        feedURLs.map(async (feedURL) => await this.getFeedFromURL(feedURL)),
+      )
+    ).filter((f): f is string => !!f);
+  }
+
+  async getFeedFromURL(feedURL: string): Promise<string | undefined> {
+    const _res = await firstValueFrom(this.httpService.get<string>(feedURL));
+    if (_res.status !== 200) return undefined;
+    if (!this.validateFeed(_res.data)) return undefined;
+    return _res.data;
+  }
+
+  validateFeed(feed: string): boolean {
+    return XMLValidator.validate(feed) === true ? true : false;
+  }
+
+  isRSSFeed(feed: any): feed is RSSFeed {
+    return 'rss' in feed;
+  }
+
+  isAtomFeed(feed: any): feed is AtomFeed {
+    return 'feed' in feed;
   }
 }
