@@ -29,6 +29,11 @@ export class FeedController implements OnModuleInit {
     return await this.feedService.getUserFeeds(req.user.sub);
   }
 
+  @Get('parsed')
+  async getParsedUserFeeds(@Body() body: { urls: string[] }) {
+    return await this.feedService.getParsedFeedsFromURLs(body.urls);
+  }
+
   @Post()
   async addFeed(
     @Req() req: Request & { user: JwtPayload },
