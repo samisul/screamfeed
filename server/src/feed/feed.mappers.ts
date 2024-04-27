@@ -12,7 +12,7 @@ import { FeedDto } from 'src/core/dtos/feed.dto';
 
 export class FeedMappers {
   static toFeedDto(feed: Feed): FeedDto {
-    return { id: feed.id, url: feed.url };
+    return { id: feed.id, url: feed.url, title: feed.title };
   }
 
   static toGenericFeed(feed: FeedRes): GenericFeed {

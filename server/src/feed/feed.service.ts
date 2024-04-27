@@ -4,7 +4,13 @@ import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { Feed } from 'src/core/entities/feed.entity';
 import { User } from 'src/core/entities/user.entity';
 import { Repository } from 'typeorm';
-import { GenericFeed, FeedRes, RSSFeed, AtomFeed } from './feed.model';
+import {
+  GenericFeed,
+  FeedRes,
+  RSSFeed,
+  AtomFeed,
+  AddFeedReq,
+} from './feed.model';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { FeedMappers } from './feed.mappers';
@@ -19,15 +25,16 @@ export class FeedService {
     private readonly httpService: HttpService,
   ) {}
 
-  async add(feedURL: string, userId: string): Promise<Feed | undefined> {
+  async add(feedDto: AddFeedReq, userId: string): Promise<Feed | undefined> {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return;
 
-    const feed = await this.feedRepo.findOne({ where: { url: feedURL } });
+    const feed = await this.feedRepo.findOne({ where: { url: feedDto.url } });
 
     if (!feed) {
       const newFeed = this.feedRepo.create();
-      newFeed.url = feedURL;
+      newFeed.url = feedDto.url;
+      newFeed.title = feedDto.title;
       newFeed.users = [user];
       return this.feedRepo.save(newFeed);
     }

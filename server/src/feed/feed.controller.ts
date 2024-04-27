@@ -53,7 +53,7 @@ export class FeedController implements OnModuleInit {
     @Req() req: Request & { user: JwtPayload },
     @Body() body: AddFeedReq,
   ): Promise<Feed | undefined> {
-    return await this.feedService.add(body.url, req.user.sub);
+    return await this.feedService.add(body, req.user.sub);
   }
 
   @Delete(':id')

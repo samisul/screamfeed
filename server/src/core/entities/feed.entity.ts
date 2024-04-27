@@ -9,6 +9,9 @@ export class Feed {
   @Column({ type: 'varchar', length: 60 })
   url: string;
 
+  @Column({ type: 'varchar', length: 60 })
+  title: string;
+
   @ManyToMany(() => User, (user) => user.feeds, { onDelete: 'CASCADE' })
   users: User[];
 

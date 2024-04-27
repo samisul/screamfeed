@@ -1,10 +1,12 @@
 export interface FeedDto {
   id: string;
   url: string;
+  title: string;
 }
 
 export interface AddFeedReq {
   url: string;
+  title: string;
 }
 
 export interface GenericFeed {

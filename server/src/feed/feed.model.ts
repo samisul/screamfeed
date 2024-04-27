@@ -1,5 +1,6 @@
 export interface AddFeedReq {
   url: string;
+  title: string;
 }
 
 interface RSSFeedRes {
