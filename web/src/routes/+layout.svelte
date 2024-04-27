@@ -13,12 +13,12 @@
   flex="flex-1 lg:flex-none"
   rounded=""
   border=""
-  class="bg-transparent w-full"
+  class="bg-surface-100-800-token w-full"
 >
   <TabAnchor href="/" selected={$page.url.pathname === '/'}>
     <svelte:fragment slot="lead"><ProfileCardSolid></ProfileCardSolid></svelte:fragment>
   </TabAnchor>
-  <TabAnchor href="/feed" selected={$page.url.pathname === '/feed'}>
+  <TabAnchor href="/feed" selected={$page.url.pathname.includes('/feed')}>
     <svelte:fragment slot="lead"><NewspaperSolid></NewspaperSolid></svelte:fragment>
   </TabAnchor>
 </TabGroup>

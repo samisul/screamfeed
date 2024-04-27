@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { DataModuleOptions } from './data.mode';
-import { createDatabase, dropDatabase } from 'typeorm-extension';
+// import { createDatabase, dropDatabase } from 'typeorm-extension';
 
 @Module({})
 export class DataModule {
