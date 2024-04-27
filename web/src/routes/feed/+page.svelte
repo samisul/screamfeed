@@ -4,6 +4,7 @@
   import { addFeed, getFeedUrls, removeFeed } from '$lib/feed/index';
   import { isLoading } from '../../stores/global.store';
   import { BookOpenSolid, CheckCircleSolid, TrashBinSolid } from 'flowbite-svelte-icons';
+  import Feed from './components/Feed.svelte';
 
   let load = true;
 
@@ -68,20 +69,7 @@
     <nav class="list-nav w-full">
       <ul>
         {#each feedListRes?.items ?? [] as item}
-          <li class="flex">
-            <a href={'/feed/' + item.id} class="flex flex-grow">
-              <div class="flex items-center flex-1">
-                <span class="badge bg-transparent">
-                  <BookOpenSolid />
-                </span>
-                <span class="flex-auto">{item.title}</span>
-              </div>
-              <i class="lg:inline hidden text-gray-500">{item.url}</i>
-            </a>
-            <button on:click={() => remove(item.id)} type="button" class="btn bg-initial">
-              <TrashBinSolid />
-            </button>
-          </li>
+          <Feed {item} on:remove={(id) => remove(id.detail)} />
         {/each}
       </ul>
     </nav>
