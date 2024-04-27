@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { UserOverview } from '$lib/user/models';
   import { isLoggedIn } from '../stores/user.store';
   import Auth from './components/Auth.svelte';
   import Profile from './components/Profile.svelte';

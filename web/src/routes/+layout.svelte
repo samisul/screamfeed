@@ -1,8 +1,9 @@
 <script lang="ts">
   import '../app.postcss';
-  import { TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
+  import { ProgressBar, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
   import { NewspaperSolid, ProfileCardSolid } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
+  import { isLoading } from '../stores/global.store';
 </script>
 
 <TabGroup
@@ -21,6 +22,9 @@
     <svelte:fragment slot="lead"><NewspaperSolid></NewspaperSolid></svelte:fragment>
   </TabAnchor>
 </TabGroup>
+{#if $isLoading}
+  <ProgressBar rounded="rounded-none" height="h-[4px]" />
+{/if}
 <div class="m-auto flex max-w-4xl flex-1 flex-col">
   <slot />
 </div>
