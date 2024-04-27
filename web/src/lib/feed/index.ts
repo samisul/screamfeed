@@ -9,7 +9,7 @@ export async function getFeedUrls(): Promise<ListRes<FeedDto> | undefined> {
   return await get<ListRes<FeedDto>>(`${FEED_URL}`);
 }
 
-export async function getParsedFeeds(urls: string[]): Promise<ListRes<GenericFeed> | undefined> {
+export async function getParsedFeeds(urls?: string[]): Promise<ListRes<GenericFeed> | undefined> {
   return await post<ListRes<GenericFeed>>(`${FEED_URL}/parsed`, { body: urls });
 }
 
