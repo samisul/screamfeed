@@ -9,10 +9,8 @@
 <AccordionItem>
   <svelte:fragment slot="summary">{feed.title}</svelte:fragment>
   <svelte:fragment slot="content">
-    <ul>
-      <div class="list-nav w-full">
-        <FeedOverviewContent {feed}></FeedOverviewContent>
-      </div>
+    <ul class="w-full">
+      <FeedOverviewContent {feed}></FeedOverviewContent>
     </ul>
   </svelte:fragment>
 </AccordionItem>

@@ -8,13 +8,11 @@
   export let item: FeedDto;
 </script>
 
-<li class="flex">
-  <a href={'/feed/' + item.id} class="flex flex-grow">
-    <div class="flex items-center flex-1">
-      <span class="flex-auto">{item.title}</span>
-    </div>
+<li class="flex justify-between">
+  <button type="button" class="btn bg-initial">
+    <span>{item.title}</span>
     <i class="lg:inline hidden text-gray-500">{item.url}</i>
-  </a>
+  </button>
   <button on:click={() => dispatch('remove', item.id)} type="button" class="btn bg-initial">
     <TrashBinSolid />
   </button>

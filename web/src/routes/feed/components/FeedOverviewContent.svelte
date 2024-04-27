@@ -2,6 +2,7 @@
   import type { GenericFeed } from '$lib/feed/model';
   import { onMount } from 'svelte';
   import { GlobeSolid } from 'flowbite-svelte-icons';
+  import { truncateString } from '$lib/helpers';
 
   export let feed: GenericFeed;
 
@@ -22,11 +23,9 @@
           <a href={item.link}>
             <GlobeSolid class="text-gray-500"></GlobeSolid>
           </a>
-          <a href={'/feed/' + item.id} class="flex flex-grow">
-            <div class="flex items-center flex-1">
-              <span class="flex-auto">{item.title}</span>
-            </div>
-          </a>
+          <button type="button" class="btn bg-initial">
+            {truncateString(item.title, 50)}
+          </button>
         </li>
       {/each}
     </ul>
