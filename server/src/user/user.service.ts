@@ -5,6 +5,7 @@ import { UserModel } from '../core/dtos/user.model';
 import { User } from 'src/core/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserOverview } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -98,5 +99,24 @@ export class UserService {
     });
 
     return JSON.stringify(_loginRes);
+  }
+
+  async getOverview(id: string): Promise<UserOverview> {
+    const _user = (await this.usersRepo
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .leftJoin('user.feeds', 'feeds')
+      .leftJoin('user.marks', 'marks')
+      .loadRelationCountAndMap('user.feedCount', 'user.feeds')
+      .loadRelationCountAndMap('user.markCount', 'user.marks')
+      .getOneOrFail()) as User & { feedCount: number; markCount: number };
+
+    return {
+      name: _user.name,
+      email: _user.email,
+      avatar: _user.avatar,
+      feedCount: _user.feedCount,
+      marksCount: _user.markCount,
+    };
   }
 }

@@ -9,12 +9,14 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
-import { LoginResDto } from '../core/auth.model';
+import { JwtPayload, LoginResDto } from '../core/auth.model';
+import { User } from 'src/core/entities/user.entity';
+import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 
 @Controller('user')
 export class UserController {
   constructor(
-    private readonly authService: UserService,
+    private readonly userService: UserService,
     private readonly configService: ConfigService,
   ) {
     this.configService.getOrThrow('CLIENT_BASE_URL');
@@ -28,7 +30,7 @@ export class UserController {
   @Get('google/callback')
   @Redirect(`${process.env['CLIENT_BASE_URL']}`)
   async googleCallBack(@Req() req: Express.Request): Promise<{ url: string }> {
-    const _data = await this.authService.getLoginData(req.user);
+    const _data = await this.userService.getLoginData(req.user);
     return { url: `${process.env['CLIENT_BASE_URL']}/?data=${_data}` };
   }
 
@@ -40,7 +42,7 @@ export class UserController {
   @Get('github/callback')
   @Redirect(`${process.env['CLIENT_BASE_URL']}`)
   async githubCallBack(@Req() req: Express.Request): Promise<{ url: string }> {
-    const _data = await this.authService.getLoginData(req.user);
+    const _data = await this.userService.getLoginData(req.user);
     return { url: `${process.env['CLIENT_BASE_URL']}/?data=${_data}` };
   }
 
@@ -51,11 +53,17 @@ export class UserController {
     const _tokens: LoginResDto = JSON.parse(req.cookies['SCREAMFEED_TOKENS']);
     if (!_tokens) throw new Error('No tokens found');
 
-    return await this.authService.refresh(_tokens.refreshToken);
+    return await this.userService.refresh(_tokens.refreshToken);
   }
 
   @Get('verify')
-  async verify(@Body() verifyReq: { accessToken: string }) {
-    return await this.authService.verify(verifyReq.accessToken);
+  async verify(@Body() verifyReq: { accessToken: string }): Promise<User> {
+    return await this.userService.verify(verifyReq.accessToken);
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Get('overview')
+  async getOverview(@Req() req: Request & { user: JwtPayload }) {
+    return await this.userService.getOverview(req.user.sub);
   }
 }

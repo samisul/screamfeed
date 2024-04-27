@@ -1,18 +1,22 @@
 import { goto } from '$app/navigation';
 import { env } from '$lib/env';
 import { get } from '$lib/http';
-import { isLoggedIn } from '../../stores/auth.store';
-import type { AuthCookie } from './models';
+import { isLoggedIn } from '../../stores/user.store';
+import type { AuthCookie, UserOverview } from './models';
 
 const TOKEN_KEY = 'SCREAMFEED_TOKENS';
-const AUTH_URL = `${env.baseUrl}/user`;
+const USER_URL = `${env.baseUrl}/user`;
+
+export async function getUserOverview(): Promise<UserOverview | undefined> {
+  return await get<UserOverview>(`${USER_URL}/overview`);
+}
 
 export function navigateToGithubOAuth(): void {
-  window.location.href = AUTH_URL + '/github';
+  window.location.href = USER_URL + '/github';
 }
 
 export function navigateToGoogleOAuth(): void {
-  window.location.href = AUTH_URL + '/google';
+  window.location.href = USER_URL + '/google';
 }
 
 export async function login(): Promise<void> {
@@ -39,7 +43,7 @@ export function logout(): void {
 export async function refresh(): Promise<void> {
   const _tokens = extractTokensFromCookie();
   if (!_tokens) return;
-  const _refreshed = await get<AuthCookie>(`${AUTH_URL}/refresh`);
+  const _refreshed = await get<AuthCookie>(`${USER_URL}/refresh`);
   if (!_refreshed) {
     logout();
     return;
