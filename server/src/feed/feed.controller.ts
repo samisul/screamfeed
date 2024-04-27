@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  OnModuleInit,
   Param,
   Post,
   Req,
@@ -19,13 +18,8 @@ import { ListRes } from 'src/core/dtos/global.dto';
 
 @UseGuards(LoggedInGuard)
 @Controller('feeds')
-export class FeedController implements OnModuleInit {
+export class FeedController {
   constructor(private readonly feedService: FeedService) {}
-  async onModuleInit() {
-    await this.feedService.getParsedFeedsFromURLs([
-      'https://thelinuxcast.org/feed/feed.xml',
-    ]);
-  }
 
   @Get()
   async getFeeds(
@@ -37,9 +31,11 @@ export class FeedController implements OnModuleInit {
 
   @Post('parsed')
   async getParsedFeeds(
-    @Body() body: { urls: string[] },
+    @Req() req: Request & { user: JwtPayload },
+    @Body() body: { urls?: string[] },
   ): Promise<ListRes<GenericFeed>> {
     const _parsedFeeds = await this.feedService.getParsedFeedsFromURLs(
+      req.user.sub,
       body.urls,
     );
     return { items: _parsedFeeds };

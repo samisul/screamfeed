@@ -72,8 +72,14 @@ export class FeedService {
     return _pagedWords.map((f) => FeedMappers.toFeedDto(f));
   }
 
-  async getParsedFeedsFromURLs(feedURLs: string[]): Promise<GenericFeed[]> {
-    return (await this.getFeedsFromURLs(feedURLs))
+  async getParsedFeedsFromURLs(
+    userId: string,
+    feedURLs?: string[],
+  ): Promise<GenericFeed[]> {
+    const _feeds =
+      feedURLs ?? (await this.getUserFeeds(userId)).map((f) => f.url);
+
+    return (await this.getFeedsFromURLs(_feeds))
       .map((feed) => {
         const _parsedFeed = this.parser.parse(feed);
         if (this.isRSSFeed(_parsedFeed))
