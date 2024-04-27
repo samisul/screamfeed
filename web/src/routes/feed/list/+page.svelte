@@ -2,9 +2,9 @@
   import type { FeedDto } from '$lib/feed/model';
   import type { ListRes } from '$lib/global';
   import { addFeed, getFeedUrls, removeFeed } from '$lib/feed/index';
-  import { isLoading } from '../../stores/global.store';
   import { CheckCircleSolid } from 'flowbite-svelte-icons';
-  import Feed from './components/Feed.svelte';
+  import { isLoading } from '../../../stores/global.store';
+  import FeedUrl from '../components/FeedUrl.svelte';
 
   let load = true;
 
@@ -69,7 +69,7 @@
     <nav class="list-nav w-full">
       <ul>
         {#each feedListRes?.items ?? [] as item}
-          <Feed {item} on:remove={(id) => remove(id.detail)} />
+          <FeedUrl {item} on:remove={(id) => remove(id.detail)} />
         {/each}
       </ul>
     </nav>
