@@ -1,14 +1,9 @@
 <script lang="ts">
   import type { GenericFeed } from '$lib/feed/model';
-  import { onMount } from 'svelte';
   import { GlobeSolid } from 'flowbite-svelte-icons';
   import { truncateString } from '$lib/helpers';
 
   export let feed: GenericFeed;
-
-  onMount(() => {
-    console.log(feed);
-  });
 </script>
 
 <li class="flex flex-col">
