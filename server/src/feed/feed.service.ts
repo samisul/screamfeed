@@ -14,6 +14,7 @@ import {
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { FeedMappers } from './feed.mappers';
+import { FeedDto } from 'src/core/dtos/feed.dto';
 
 @Injectable()
 export class FeedService {
@@ -43,22 +44,32 @@ export class FeedService {
     return this.feedRepo.save(feed);
   }
 
-  async remove(feedURL: string, userId: string): Promise<void> {
+  async remove(feedId: string, userId: string): Promise<void> {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return;
 
-    const feed = await this.feedRepo.findOne({ where: { url: feedURL } });
+    const feed = await this.feedRepo.findOne({
+      where: { id: feedId },
+      relations: ['users'],
+    });
     if (!feed) return;
 
     feed.users = feed.users.filter((u) => u.id !== user.id);
     await this.feedRepo.save(feed);
   }
 
-  async getUserFeeds(userId: string): Promise<Feed[]> {
+  async getUserFeeds(userId: string): Promise<FeedDto[]> {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return [];
 
-    return await this.feedRepo.find({ where: { users: { id: user.id } } });
+    const _pagedWords = await this.feedRepo
+      .createQueryBuilder('feed')
+      .leftJoin('feed.users', 'user')
+      .where('user.id = :id', { id: userId })
+      .orderBy('feed.createdAt', 'DESC')
+      .getMany();
+
+    return _pagedWords.map((f) => FeedMappers.toFeedDto(f));
   }
 
   async getParsedFeedsFromURLs(feedURLs: string[]): Promise<GenericFeed[]> {

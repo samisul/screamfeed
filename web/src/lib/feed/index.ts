@@ -13,8 +13,8 @@ export async function getParsedFeeds(urls: string[]): Promise<ListRes<GenericFee
   return await post<ListRes<GenericFeed>>(`${FEED_URL}/parsed`, { body: urls });
 }
 
-export async function addFeed(url: string): Promise<FeedDto | undefined> {
-  return await post<FeedDto>(`${FEED_URL}`, { url } as AddFeedReq);
+export async function addFeed(req: AddFeedReq): Promise<FeedDto | undefined> {
+  return await post<FeedDto>(`${FEED_URL}`, req);
 }
 
 export async function removeFeed(id: string): Promise<boolean> {

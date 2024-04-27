@@ -1,7 +1,7 @@
 <script lang="ts">
   import '../app.postcss';
   import { ProgressBar, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
-  import { NewspaperSolid, ProfileCardSolid } from 'flowbite-svelte-icons';
+  import { ProfileCardSolid, PenNibSolid } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
   import { isLoading } from '../stores/global.store';
 </script>
@@ -19,7 +19,7 @@
     <svelte:fragment slot="lead"><ProfileCardSolid></ProfileCardSolid></svelte:fragment>
   </TabAnchor>
   <TabAnchor href="/feed" selected={$page.url.pathname.includes('/feed')}>
-    <svelte:fragment slot="lead"><NewspaperSolid></NewspaperSolid></svelte:fragment>
+    <svelte:fragment slot="lead"><PenNibSolid></PenNibSolid></svelte:fragment>
   </TabAnchor>
 </TabGroup>
 {#if $isLoading}
