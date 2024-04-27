@@ -12,7 +12,11 @@ import {
 import { FeedService } from './feed.service';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { JwtPayload } from 'src/core/auth.model';
-import { AddFeedReq } from './feed.model';
+import { AddFeedReq, GenericFeed } from './feed.model';
+import { Feed } from 'src/core/entities/feed.entity';
+import { FeedMappers } from './feed.mappers';
+import { FeedDto } from 'src/core/dtos/feed.dto';
+import { ListRes } from 'src/core/dtos/global.dto';
 
 @UseGuards(LoggedInGuard)
 @Controller('feeds')
@@ -25,20 +29,30 @@ export class FeedController implements OnModuleInit {
   }
 
   @Get()
-  async getUserFeeds(@Req() req: Request & { user: JwtPayload }) {
-    return await this.feedService.getUserFeeds(req.user.sub);
+  async getFeeds(
+    @Req() req: Request & { user: JwtPayload },
+  ): Promise<ListRes<FeedDto>> {
+    const _feeds = (await this.feedService.getUserFeeds(req.user.sub)).map(
+      (feed) => FeedMappers.toFeedDto(feed),
+    );
+    return { items: _feeds };
   }
 
-  @Get('parsed')
-  async getParsedUserFeeds(@Body() body: { urls: string[] }) {
-    return await this.feedService.getParsedFeedsFromURLs(body.urls);
+  @Post('parsed')
+  async getParsedFeeds(
+    @Body() body: { urls: string[] },
+  ): Promise<ListRes<GenericFeed>> {
+    const _parsedFeeds = await this.feedService.getParsedFeedsFromURLs(
+      body.urls,
+    );
+    return { items: _parsedFeeds };
   }
 
   @Post()
   async addFeed(
     @Req() req: Request & { user: JwtPayload },
     @Body() body: AddFeedReq,
-  ) {
+  ): Promise<Feed | undefined> {
     return await this.feedService.add(body.url, req.user.sub);
   }
 

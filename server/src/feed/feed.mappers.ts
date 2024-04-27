@@ -1,3 +1,4 @@
+import { Feed } from 'src/core/entities/feed.entity';
 import type {
   RSSFeed,
   RSSFeedItem,
@@ -7,8 +8,13 @@ import type {
   FeedRes,
   GenericFeed,
 } from './feed.model';
+import { FeedDto } from 'src/core/dtos/feed.dto';
 
 export class FeedMappers {
+  static toFeedDto(feed: Feed): FeedDto {
+    return { id: feed.id, url: feed.url };
+  }
+
   static toGenericFeed(feed: FeedRes): GenericFeed {
     if (feed.type === 'rss')
       return {

@@ -16,7 +16,7 @@ export async function get<T>(url: string): Promise<T | undefined> {
   }
 }
 
-export async function post<T>(url: string, body: T): Promise<boolean> {
+export async function post<T>(url: string, body: unknown): Promise<T | undefined> {
   try {
     return (
       await fetch(url, {
@@ -27,9 +27,9 @@ export async function post<T>(url: string, body: T): Promise<boolean> {
         },
         body: JSON.stringify(body)
       })
-    ).ok;
+    ).json() as T;
   } catch {
-    return false;
+    return undefined;
   }
 }
 
