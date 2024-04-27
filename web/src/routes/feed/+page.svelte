@@ -3,7 +3,7 @@
   import type { ListRes } from '$lib/global';
   import { addFeed, getFeedUrls, removeFeed } from '$lib/feed/index';
   import { isLoading } from '../../stores/global.store';
-  import { BookOpenSolid, CheckCircleSolid, TrashBinSolid } from 'flowbite-svelte-icons';
+  import { CheckCircleSolid } from 'flowbite-svelte-icons';
   import Feed from './components/Feed.svelte';
 
   let load = true;
