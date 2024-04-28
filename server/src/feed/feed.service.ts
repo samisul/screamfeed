@@ -18,7 +18,7 @@ import { FeedDto } from 'src/core/dtos/feed.dto';
 
 @Injectable()
 export class FeedService {
-  private readonly parser = new XMLParser();
+  private readonly parser = new XMLParser({ ignoreAttributes: false });
 
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,

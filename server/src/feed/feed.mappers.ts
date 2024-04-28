@@ -78,7 +78,7 @@ export class FeedMappers {
   private static toAtomFeedEntry(entry: any): AtomFeedEntry {
     return {
       title: entry.title,
-      link: entry.link,
+      link: typeof entry.link === 'string' ? entry.link : entry.link['@_href'],
       id: entry.id,
       updated: entry.updated,
       summary: entry.content ?? entry.summary,
