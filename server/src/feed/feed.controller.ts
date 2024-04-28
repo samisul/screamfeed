@@ -25,7 +25,7 @@ export class FeedController {
   async getFeeds(
     @Req() req: Request & { user: JwtPayload },
   ): Promise<ListRes<FeedDto>> {
-    const _feeds = await this.feedService.getUserFeeds(req.user.sub);
+    const _feeds = await this.feedService.get(req.user.sub);
     return { items: _feeds };
   }
 

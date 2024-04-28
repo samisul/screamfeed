@@ -61,7 +61,7 @@ export class FeedService {
     await this.feedRepo.save(feed);
   }
 
-  async getUserFeeds(userId: string): Promise<FeedDto[]> {
+  async get(userId: string): Promise<FeedDto[]> {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return [];
 
@@ -79,8 +79,7 @@ export class FeedService {
     userId: string,
     feedURLs?: string[],
   ): Promise<GenericFeed[]> {
-    const _feeds =
-      feedURLs ?? (await this.getUserFeeds(userId)).map((f) => f.url);
+    const _feeds = feedURLs ?? (await this.get(userId)).map((f) => f.url);
 
     return (await this.getFeedsFromURLs(_feeds))
       .map((feed) => {
