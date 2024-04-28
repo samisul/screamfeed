@@ -20,17 +20,21 @@
         <a
           href={$modalStore[0].meta.item.link}
           target="_blank"
-          class="text-3xl font-bold hover:border-b"
+          class="text-3xl font-bold hover:border-b {$modalStore[0].meta.item.link
+            ? ''
+            : 'pointer-events-none'}"
         >
           {$modalStore[0].meta.item.title}
           <i class="block text-gray-500 text-xs">{$modalStore[0].meta.item.date}</i>
         </a>
       </div>
-      <p
-        class="text-sm max-h-[80vh] overflow-y-scroll p-4"
-        bind:innerHTML={$modalStore[0].meta.item.content}
-        contenteditable
-      ></p>
+      {#if $modalStore[0].meta.item.content}
+        <p
+          class="text-sm max-h-[80vh] overflow-y-scroll p-4"
+          bind:innerHTML={$modalStore[0].meta.item.content}
+          contenteditable
+        ></p>
+      {/if}
     </div>
   </div>
 {/if}
