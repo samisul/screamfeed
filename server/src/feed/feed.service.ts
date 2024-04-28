@@ -30,7 +30,10 @@ export class FeedService {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return;
 
-    const feed = await this.feedRepo.findOne({ where: { url: feedDto.url } });
+    const feed = await this.feedRepo.findOne({
+      where: { url: feedDto.url },
+      relations: ['users'],
+    });
 
     if (!feed) {
       const newFeed = this.feedRepo.create();
@@ -110,10 +113,14 @@ export class FeedService {
   }
 
   private async getFeedFromURL(feedURL: string): Promise<string | undefined> {
-    const _res = await firstValueFrom(this.httpService.get<string>(feedURL));
-    if (_res.status !== 200) return undefined;
-    if (!this.validateFeed(_res.data)) return undefined;
-    return _res.data;
+    try {
+      const _res = await firstValueFrom(this.httpService.get<string>(feedURL));
+      if (_res.status !== 200) return undefined;
+      if (!this.validateFeed(_res.data)) return undefined;
+      return _res.data;
+    } catch (e) {
+      return undefined;
+    }
   }
 
   private validateFeed(feed: string): boolean {

@@ -1,7 +1,12 @@
 <script lang="ts">
   import '../app.postcss';
   import { ProgressBar, TabAnchor, TabGroup, type ModalComponent } from '@skeletonlabs/skeleton';
-  import { ProfileCardSolid, PenNibSolid, NewspaperSolid } from 'flowbite-svelte-icons';
+  import {
+    ProfileCardSolid,
+    PenNibSolid,
+    NewspaperSolid,
+    FileImportSolid
+  } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
   import { isLoading } from '../stores/global.store';
   import { initializeStores, Modal } from '@skeletonlabs/skeleton';
@@ -33,6 +38,11 @@
   <TabAnchor href="/feed/overview" selected={$page.url.pathname.includes('/feed/overview')}>
     <svelte:fragment slot="lead">
       <NewspaperSolid></NewspaperSolid>
+    </svelte:fragment>
+  </TabAnchor>
+  <TabAnchor href="/feed/inout" selected={$page.url.pathname.includes('/feed/inout')}>
+    <svelte:fragment slot="lead">
+      <FileImportSolid></FileImportSolid>
     </svelte:fragment>
   </TabAnchor>
 </TabGroup>

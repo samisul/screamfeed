@@ -6,7 +6,7 @@ export class Feed {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 60 })
+  @Column({ type: 'varchar', length: 255 })
   url: string;
 
   @Column({ type: 'varchar', length: 60 })
