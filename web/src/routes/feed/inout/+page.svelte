@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { addFeed } from '$lib/feed';
+  import { addFeed, getFeedUrls } from '$lib/feed';
   import { invalidUrl } from '$lib/helpers';
   import { FileDropzone, TabGroup, Tab } from '@skeletonlabs/skeleton';
   import { CheckCircleSolid, UploadSolid } from 'flowbite-svelte-icons';
@@ -38,6 +38,19 @@
       };
       _reader.readAsText(_file);
     }
+  }
+
+  async function onExport() {
+    const _urls = (await getFeedUrls())?.items;
+    if (!_urls) return;
+    const _text = _urls.map((url) => `${url.url} ${url.title}`).join('\n');
+    const _blob = new Blob([_text], { type: 'text/plain' });
+    const _url = URL.createObjectURL(_blob);
+    const _a = document.createElement('a');
+    _a.href = _url;
+    _a.download = 'feeds.txt';
+    _a.click();
+    _a.remove();
   }
 
   async function saveImports() {
@@ -92,7 +105,11 @@
         </button>
       </div>
     {:else if tabSet === 1}
-      (tab panel 2 contents)
+      <div class="lg:p-4 p-2 flex flex-col gap-4 justify-center align-middle items-center">
+        <button on:click={onExport} type="button" class="btn variant-filled-surface w-full">
+          <UploadSolid />
+        </button>
+      </div>
     {/if}
   </svelte:fragment>
 </TabGroup>
