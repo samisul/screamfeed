@@ -2,15 +2,29 @@
   import type { GenericFeed } from '$lib/feed/model';
   import { AccordionItem } from '@skeletonlabs/skeleton';
   import FeedOverviewContent from '../components/FeedOverviewContent.svelte';
+  import { RefreshOutline } from 'flowbite-svelte-icons';
+  import { getParsedFeeds } from '$lib/feed';
 
   export let feed: GenericFeed;
+
+  async function refreshFeed() {
+    console.log(feed.feedUrl);
+    const _feeds = await getParsedFeeds([feed.feedUrl]);
+    if (!_feeds) return;
+    feed = { ..._feeds.items[0] };
+  }
 </script>
 
-<AccordionItem>
-  <svelte:fragment slot="summary">{feed.title}</svelte:fragment>
-  <svelte:fragment slot="content">
-    <ul class="w-full">
-      <FeedOverviewContent {feed}></FeedOverviewContent>
-    </ul>
-  </svelte:fragment>
-</AccordionItem>
+<div class="flex">
+  <AccordionItem class="w-full">
+    <svelte:fragment slot="summary">{feed.title}</svelte:fragment>
+    <svelte:fragment slot="content">
+      <ul class="w-full">
+        <FeedOverviewContent {feed}></FeedOverviewContent>
+      </ul>
+    </svelte:fragment>
+  </AccordionItem>
+  <button type="button" class="btn btn-sm bg-initial" on:click={refreshFeed}>
+    <RefreshOutline />
+  </button>
+</div>

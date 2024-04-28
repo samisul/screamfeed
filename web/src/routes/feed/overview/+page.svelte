@@ -24,7 +24,7 @@
 </script>
 
 <div class="lg:p-4 p-2 flex flex-col gap-4">
-  <Accordion autocollapse>
+  <Accordion>
     {#each genericFeeds?.items ?? [] as feed}
       <FeedOverview {feed} />
     {/each}

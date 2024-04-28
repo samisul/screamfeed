@@ -59,6 +59,7 @@ export interface GenericFeed {
   language?: string;
   updated?: string;
   items: GenericFeedItem[];
+  feedUrl: string;
 }
 
 export interface GenericFeedItem {

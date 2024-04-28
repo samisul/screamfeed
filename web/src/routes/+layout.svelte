@@ -30,6 +30,6 @@
 {#if $isLoading}
   <ProgressBar rounded="rounded-none" height="h-[4px]" />
 {/if}
-<div class="m-auto flex max-w-4xl flex-1 flex-col">
+<div class="m-auto flex max-w-4xl flex-1 flex-col overflow-auto max-h-[95vh]">
   <slot />
 </div>

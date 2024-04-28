@@ -28,8 +28,8 @@ export async function login(): Promise<void> {
   else if (_urlTokens) setTokensInCookie(_urlTokens);
 
   isLoggedIn.set(true);
-  setInterval(() => {
-    refresh();
+  setInterval(async () => {
+    await refresh();
   }, 60000);
 
   goto('/');
@@ -38,6 +38,7 @@ export async function login(): Promise<void> {
 export function logout(): void {
   document.cookie = `${TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   isLoggedIn.set(false);
+  goto('/');
 }
 
 export async function refresh(): Promise<void> {

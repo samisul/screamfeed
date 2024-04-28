@@ -15,7 +15,7 @@ export class FeedMappers {
     return { id: feed.id, url: feed.url, title: feed.title };
   }
 
-  static toGenericFeed(feed: FeedRes): GenericFeed {
+  static toGenericFeed(feed: FeedRes, feedUrl: string): GenericFeed {
     if (feed.type === 'rss')
       return {
         title: feed.feed.rss.channel.title,
@@ -25,6 +25,7 @@ export class FeedMappers {
         items: feed.feed.rss.channel.item.map(
           FeedMappers.rssFeedItemToGenericFeedItem,
         ),
+        feedUrl,
       };
     if (feed.type === 'atom')
       return {
@@ -34,6 +35,7 @@ export class FeedMappers {
         items: feed.feed.feed.entry.map(
           FeedMappers.atomFeedEntryToGenericFeedItem,
         ),
+        feedUrl,
       };
     throw new Error('Unsupported feed type');
   }

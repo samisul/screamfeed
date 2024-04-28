@@ -81,23 +81,32 @@ export class FeedService {
 
     return (await this.getFeedsFromURLs(_feeds))
       .map((feed) => {
-        const _parsedFeed = this.parser.parse(feed);
+        const _parsedFeed = this.parser.parse(feed.feed ?? '');
         if (this.isRSSFeed(_parsedFeed))
-          return { type: 'rss', feed: FeedMappers.toRSSFeed(_parsedFeed) };
+          return {
+            url: feed.urls,
+            feed: { type: 'rss', feed: FeedMappers.toRSSFeed(_parsedFeed) },
+          };
         if (this.isAtomFeed(_parsedFeed))
-          return { type: 'atom', feed: FeedMappers.toAtomFeed(_parsedFeed) };
+          return {
+            url: feed.urls,
+            feed: { type: 'atom', feed: FeedMappers.toAtomFeed(_parsedFeed) },
+          };
         return undefined;
       })
-      .filter((f): f is FeedRes => !!f)
-      .map((f) => FeedMappers.toGenericFeed(f));
+      .filter((f) => !!f)
+      .map((f) => FeedMappers.toGenericFeed(f!.feed as FeedRes, f?.url ?? ''));
   }
 
-  private async getFeedsFromURLs(feedURLs: string[]): Promise<string[]> {
+  private async getFeedsFromURLs(feedURLs: string[]) {
     return (
       await Promise.all(
-        feedURLs.map(async (feedURL) => await this.getFeedFromURL(feedURL)),
+        feedURLs.map(async (feedURL) => ({
+          urls: feedURL,
+          feed: await this.getFeedFromURL(feedURL),
+        })),
       )
-    ).filter((f): f is string => !!f);
+    ).filter((f) => !!f);
   }
 
   private async getFeedFromURL(feedURL: string): Promise<string | undefined> {
