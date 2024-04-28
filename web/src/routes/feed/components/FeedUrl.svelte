@@ -9,10 +9,10 @@
 </script>
 
 <li class="flex justify-between">
-  <button type="button" class="btn bg-initial">
+  <span>
     <span>{item.title}</span>
-    <i class="lg:inline hidden text-gray-500">{item.url}</i>
-  </button>
+    <i class="lg:inline hidden text-gray-500 text-sm">- {item.url}</i>
+  </span>
   <button on:click={() => dispatch('remove', item.id)} type="button" class="btn bg-initial">
     <TrashBinSolid />
   </button>
