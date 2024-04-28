@@ -1,12 +1,13 @@
 <script lang="ts">
   import { addFeed, getFeedUrls } from '$lib/feed';
   import { invalidUrl } from '$lib/helpers';
-  import { FileDropzone, TabGroup, Tab } from '@skeletonlabs/skeleton';
-  import { CheckCircleSolid, UploadSolid } from 'flowbite-svelte-icons';
+  import { TabGroup, Tab } from '@skeletonlabs/skeleton';
   import { isLoading } from '../../../stores/global.store';
   import { onMount } from 'svelte';
   import { isLoggedIn } from '../../../stores/user.store';
   import { goto } from '$app/navigation';
+  import Export from './components/Export.svelte';
+  import Import from './components/Import.svelte';
 
   let tabSet: number = 0;
   let files: FileList;
@@ -69,46 +70,15 @@
   <Tab bind:group={tabSet} name="export" value={1}>Export</Tab>
   <svelte:fragment slot="panel">
     {#if tabSet === 0}
-      <div class="lg:p-4 p-2 flex flex-col gap-4 justify-center align-middle items-center">
-        <FileDropzone rounded="rounded-none" name="files" bind:files />
-        <div class="space-y-2 w-full">
-          {#each imports as imp}
-            <label class="flex items-center space-x-2">
-              <input class="checkbox" type="checkbox" bind:checked={imp.checked} />
-              <input
-                class="input"
-                title="Input (text)"
-                type="text"
-                placeholder="URL"
-                bind:value={imp.url}
-              />
-              <input
-                class="input"
-                title="Input (text)"
-                type="text"
-                placeholder="Title"
-                bind:value={imp.title}
-              />
-            </label>
-          {/each}
-        </div>
-        <button
-          on:click={uploadImportFiles}
-          type="button"
-          class="btn variant-filled-surface w-full"
-          disabled={!files}
-        >
-          <UploadSolid />
-        </button>
-        <button on:click={saveImports} type="button" class="btn variant-filled-surface w-full">
-          <CheckCircleSolid />
-        </button>
-      </div>
+      <Import
+        bind:imports
+        bind:files
+        on:saveImports={saveImports}
+        on:uploadImportFiles={uploadImportFiles}
+      ></Import>
     {:else if tabSet === 1}
       <div class="lg:p-4 p-2 flex flex-col gap-4 justify-center align-middle items-center">
-        <button on:click={onExport} type="button" class="btn variant-filled-surface w-full">
-          <UploadSolid />
-        </button>
+        <Export on:onExport={onExport}></Export>
       </div>
     {/if}
   </svelte:fragment>
