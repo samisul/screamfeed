@@ -1,11 +1,20 @@
 <script lang="ts">
   import '../app.postcss';
-  import { ProgressBar, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
+  import { ProgressBar, TabAnchor, TabGroup, type ModalComponent } from '@skeletonlabs/skeleton';
   import { ProfileCardSolid, PenNibSolid, NewspaperSolid } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
   import { isLoading } from '../stores/global.store';
+  import { initializeStores, Modal } from '@skeletonlabs/skeleton';
+  import FeedItemContent from './feed/components/FeedItemContent.svelte';
+
+  initializeStores();
+
+  const modalRegistry: Record<string, ModalComponent> = {
+    feedItemContent: { ref: FeedItemContent }
+  };
 </script>
 
+<Modal components={modalRegistry} />
 <TabGroup
   justify="justify-center"
   active="variant-filled-primary"

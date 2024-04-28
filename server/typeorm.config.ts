@@ -4,7 +4,6 @@ import { User } from 'src/core/entities/user.entity';
 import { DataSource } from 'typeorm';
 
 dotenv.config({ path: './.env' });
-console.log(process.env['DB_HOST']);
 export default new DataSource({
   type: 'mariadb',
   host: process.env['DB_HOST'],

@@ -69,7 +69,7 @@ export class FeedMappers {
     return {
       title: item.title,
       link: item.link,
-      content: item['content:encoded'],
+      content: item['content:encoded'] ?? item.description,
       pubDate: item.pubDate,
       guid: item.guid,
     };

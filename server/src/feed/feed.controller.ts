@@ -34,7 +34,6 @@ export class FeedController {
     @Req() req: Request & { user: JwtPayload },
     @Body() body: { urls?: string[] },
   ): Promise<ListRes<GenericFeed>> {
-    console.log(body);
     const _parsedFeeds = await this.feedService.getParsedFeedsFromURLs(
       req.user.sub,
       body.urls,
