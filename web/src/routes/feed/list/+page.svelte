@@ -5,6 +5,9 @@
   import { CheckCircleSolid } from 'flowbite-svelte-icons';
   import { isLoading } from '../../../stores/global.store';
   import FeedUrl from '../components/FeedUrl.svelte';
+  import { onMount } from 'svelte';
+  import { isLoggedIn } from '../../../stores/user.store';
+  import { goto } from '$app/navigation';
 
   let load = true;
 
@@ -21,6 +24,10 @@
       load = false;
     }
   }
+
+  onMount(() => {
+    if (!$isLoggedIn) goto('/');
+  });
 
   async function get(): Promise<void> {
     $isLoading = true;

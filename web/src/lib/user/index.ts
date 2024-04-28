@@ -38,7 +38,6 @@ export async function login(): Promise<void> {
 export function logout(): void {
   document.cookie = `${TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   isLoggedIn.set(false);
-  goto('/');
 }
 
 export async function refresh(): Promise<void> {

@@ -4,6 +4,9 @@
   import { FileDropzone, TabGroup, Tab } from '@skeletonlabs/skeleton';
   import { CheckCircleSolid, UploadSolid } from 'flowbite-svelte-icons';
   import { isLoading } from '../../../stores/global.store';
+  import { onMount } from 'svelte';
+  import { isLoggedIn } from '../../../stores/user.store';
+  import { goto } from '$app/navigation';
 
   let tabSet: number = 0;
   let files: FileList;
@@ -13,6 +16,10 @@
     title: string;
     url: string;
   }[] = [];
+
+  onMount(() => {
+    if (!$isLoggedIn) goto('/');
+  });
 
   function uploadImportFiles() {
     for (let i = 0; i < files.length; i++) {

@@ -5,6 +5,9 @@
   import { isLoading } from '../../../stores/global.store';
   import { Accordion } from '@skeletonlabs/skeleton';
   import FeedOverview from '../components/FeedOverview.svelte';
+  import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+  import { isLoggedIn } from '../../../stores/user.store';
 
   let load = true;
   let genericFeeds: ListRes<GenericFeed> | undefined = undefined;
@@ -15,6 +18,10 @@
       load = false;
     }
   }
+
+  onMount(() => {
+    if (!$isLoggedIn) goto('/');
+  });
 
   async function get(): Promise<void> {
     $isLoading = true;
