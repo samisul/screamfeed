@@ -24,5 +24,5 @@ export interface GenericFeedItem {
   title: string;
   link: string;
   content: string;
-  data: string;
+  date: string;
 }

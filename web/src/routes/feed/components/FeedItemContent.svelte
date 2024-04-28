@@ -15,9 +15,14 @@
       <CloseOutline />
     </button>
     <div class="lg:w-full max-w-4xl m-auto">
-      <h1 class="text-2xl font-bold">
+      <a
+        href={$modalStore[0].meta.item.link}
+        target="_blank"
+        class="text-3xl font-bold hover:border-b"
+      >
         {$modalStore[0].meta.item.title}
-      </h1>
+      </a>
+      <i class="block text-gray-500">{$modalStore[0].meta.item.date}</i>
       <p
         class="text-sm max-h-[90vh] overflow-y-scroll p-4"
         bind:innerHTML={$modalStore[0].meta.item.content}

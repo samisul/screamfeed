@@ -93,7 +93,7 @@ export class FeedMappers {
       title: item.title,
       link: item.link,
       content: item.content,
-      data: item.pubDate,
+      date: item.pubDate,
     };
   }
 
@@ -105,7 +105,7 @@ export class FeedMappers {
       title: entry.title,
       link: entry.link,
       content: entry.summary,
-      data: entry.updated,
+      date: entry.updated,
     };
   }
 }

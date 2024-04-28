@@ -26,7 +26,7 @@
     <ul>
       {#each feed?.items ?? [] as item}
         <li class="flex">
-          <a href={item.link}>
+          <a href={item.link} target="_blank">
             <GlobeSolid class="text-gray-500"></GlobeSolid>
           </a>
           <button
