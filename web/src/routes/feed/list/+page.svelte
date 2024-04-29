@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { FeedDto } from '$lib/feed/model';
-  import type { ListRes } from '$lib/global';
   import { addFeed, getFeedUrls, removeFeed } from '$lib/feed/index';
   import { CheckCircleSolid } from 'flowbite-svelte-icons';
   import { isLoading } from '../../../stores/global.store';
@@ -10,6 +8,9 @@
   import { goto } from '$app/navigation';
   import { getToastStore } from '@skeletonlabs/skeleton';
   import { invalidUrl } from '$lib/helpers';
+  import type { PageModel } from './page.model';
+
+  export let data: PageModel | undefined = undefined;
 
   const toastStore = getToastStore();
 
@@ -18,13 +19,11 @@
     title: ''
   };
 
-  let load = true;
-
-  let feedListRes: ListRes<FeedDto> | undefined = undefined;
+  let load = false;
 
   $: {
     if (load) {
-      get();
+      refresh();
       load = false;
     }
   }
@@ -33,9 +32,9 @@
     if (!$isLoggedIn) goto('/');
   });
 
-  async function get(): Promise<void> {
+  async function refresh(): Promise<void> {
     $isLoading = true;
-    feedListRes = await getFeedUrls();
+    data = { ...data, feeds: await getFeedUrls() };
     $isLoading = false;
   }
 
@@ -93,16 +92,15 @@
     </button>
   </div>
 
-  {#if feedListRes}
+  {#if data?.feeds}
     <nav class="list-nav w-full">
       <ul>
-        {#each feedListRes?.items ?? [] as item}
+        {#each data?.feeds.items ?? [] as item}
           <FeedUrl {item} on:remove={(id) => remove(id.detail)} />
+        {:else}
+          <div class="text-center">No Feeds Found.</div>
         {/each}
       </ul>
     </nav>
-    {#if feedListRes?.items.length === 0}
-      <div class="text-center">No Feeds Found.</div>
-    {/if}
   {/if}
 </div>

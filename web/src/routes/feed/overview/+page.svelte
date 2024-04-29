@@ -1,7 +1,6 @@
 <script lang="ts">
   import { getParsedFeeds } from '$lib/feed';
-  import type { GenericFeed, GenericFeedItem } from '$lib/feed/model';
-  import type { ListRes } from '$lib/global';
+  import type { GenericFeedItem } from '$lib/feed/model';
   import { isLoading } from '../../../stores/global.store';
   import { Accordion } from '@skeletonlabs/skeleton';
   import FeedOverview from '../components/FeedOverview.svelte';
@@ -9,13 +8,14 @@
   import { goto } from '$app/navigation';
   import { isLoggedIn } from '../../../stores/user.store';
   import { addMark } from '$lib/mark';
+  import type { PageModel } from './page.model';
 
-  let load = true;
-  let genericFeeds: ListRes<GenericFeed> | undefined = undefined;
+  let load = false;
+  export let data: PageModel | undefined = undefined;
 
   $: {
     if (load) {
-      get();
+      refresh();
       load = false;
     }
   }
@@ -24,9 +24,10 @@
     if (!$isLoggedIn) goto('/');
   });
 
-  async function get(): Promise<void> {
+  async function refresh(): Promise<void> {
+    if (!data) return;
     $isLoading = true;
-    genericFeeds = await getParsedFeeds();
+    data = { ...data, feeds: await getParsedFeeds() };
     $isLoading = false;
   }
 
@@ -41,9 +42,10 @@
 
 <div class="lg:p-4 p-2 flex flex-col gap-4">
   <Accordion>
-    {#each genericFeeds?.items ?? [] as feed}
+    {#each data?.feeds?.items ?? [] as feed}
       <FeedOverview on:mark={(e) => mark(e.detail)} {feed} />
+    {:else}
+      <div class="text-center">No Feeds Found.</div>
     {/each}
   </Accordion>
-  <div class="text-center">No Feeds Found.</div>
 </div>
