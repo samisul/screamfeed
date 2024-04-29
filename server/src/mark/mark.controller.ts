@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtPayload } from 'src/core/auth.model';
 import { ListRes } from 'src/core/dtos/global.dto';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
@@ -24,5 +33,13 @@ export class MarkController {
     @Body() body: AddMarkDto,
   ): Promise<void> {
     await this.markService.add(req.user.sub, body);
+  }
+
+  @Delete(':id')
+  async remove(
+    @Req() req: Request & { user: JwtPayload },
+    @Param('id') id: string,
+  ): Promise<void> {
+    await this.markService.remove(req.user.sub, id);
   }
 }

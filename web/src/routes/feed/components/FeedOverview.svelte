@@ -19,7 +19,7 @@
     <svelte:fragment slot="summary">{feed.title}</svelte:fragment>
     <svelte:fragment slot="content">
       <ul class="w-full">
-        <FeedOverviewContent {feed}></FeedOverviewContent>
+        <FeedOverviewContent {feed} on:mark></FeedOverviewContent>
       </ul>
     </svelte:fragment>
   </AccordionItem>

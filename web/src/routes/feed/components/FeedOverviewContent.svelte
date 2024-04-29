@@ -1,10 +1,13 @@
 <script lang="ts">
   import type { GenericFeed, GenericFeedItem } from '$lib/feed/model';
-  import { GlobeSolid } from 'flowbite-svelte-icons';
+  import { GlobeSolid, MapPinSolid } from 'flowbite-svelte-icons';
   import { truncateString } from '$lib/helpers';
   import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+  import { createEventDispatcher } from 'svelte';
 
   export let feed: GenericFeed;
+
+  const dispatch = createEventDispatcher();
 
   const modalStore = getModalStore();
 
@@ -26,6 +29,9 @@
     <ul>
       {#each feed?.items ?? [] as item}
         <li class="flex">
+          <button type="button" class="btn bg-initial" on:click={() => dispatch('mark', item)}>
+            <MapPinSolid class="text-gray-500"></MapPinSolid>
+          </button>
           <a href={item.link} target="_blank" class={item.link ? '' : 'pointer-events-none'}>
             <GlobeSolid class="text-gray-500"></GlobeSolid>
           </a>
