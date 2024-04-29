@@ -8,13 +8,17 @@
   import { onMount } from 'svelte';
   import { isLoggedIn } from '../../../stores/user.store';
   import { goto } from '$app/navigation';
+  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { invalidUrl } from '$lib/helpers';
 
-  let load = true;
+  const toastStore = getToastStore();
 
   const form = {
     url: '',
     title: ''
   };
+
+  let load = true;
 
   let feedListRes: ListRes<FeedDto> | undefined = undefined;
 
@@ -37,11 +41,28 @@
 
   async function add() {
     if (!form.url || !form.title) return;
+    if (invalidUrl(form.url)) {
+      toastStore.trigger({
+        message: 'Error: Invalid URL',
+        background: 'variant-filled-primary',
+        hoverable: true
+      });
+      return;
+    }
+
     $isLoading = true;
-    await addFeed(form);
+    const _res = await addFeed(form);
     form.url = '';
     form.title = '';
     $isLoading = false;
+    if (!_res) {
+      toastStore.trigger({
+        message: 'Error: Could not Add URL',
+        background: 'variant-filled-primary',
+        hoverable: true
+      });
+      return;
+    }
     load = true;
   }
 

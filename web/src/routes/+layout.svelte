@@ -9,16 +9,19 @@
   } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
   import { isLoading } from '../stores/global.store';
-  import { initializeStores, Modal } from '@skeletonlabs/skeleton';
+  import { initializeStores as initModalStore, Modal } from '@skeletonlabs/skeleton';
   import FeedItemContent from './feed/components/FeedItemContent.svelte';
+  import { initializeStores as initToastStore, Toast } from '@skeletonlabs/skeleton';
 
-  initializeStores();
+  initModalStore();
+  initToastStore();
 
   const modalRegistry: Record<string, ModalComponent> = {
     feedItemContent: { ref: FeedItemContent }
   };
 </script>
 
+<Toast rounded="rounded-none" position="bl" max={4} padding="p-3" buttonDismiss="bg-transparent" />
 <Modal components={modalRegistry} />
 <TabGroup
   justify="justify-center"
