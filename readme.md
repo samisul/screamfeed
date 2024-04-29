@@ -1,3 +1,9 @@
+### Screenshots
+
+![3](./.github/screenshots/3.png)
+![4](./.github/screenshots/4.png)
+![5](./.github/screenshots/5.png)
+
 ### Features
 
 - [x] add/remove feeds
