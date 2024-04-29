@@ -2,7 +2,7 @@
   import type { GenericFeedItem } from '$lib/feed/model';
   import { GlobeSolid, TrashBinSolid } from 'flowbite-svelte-icons';
   import { truncateString } from '$lib/helpers';
-  import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+  import { getModalStore, getToastStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import type { PageModel } from './page.model';
   import { onMount } from 'svelte';
   import { isLoggedIn } from '../../../stores/user.store';
@@ -13,6 +13,7 @@
   export let data: PageModel | undefined = undefined;
 
   const modalStore = getModalStore();
+  const toastStore = getToastStore();
 
   onMount(() => {
     if (!$isLoggedIn) goto('/');
@@ -31,10 +32,21 @@
     const _res = await removeMark(id);
     $isLoading = false;
     if (_res) {
+      toastStore.trigger({
+        message: 'Mark Removed',
+        background: 'variant-filled-primary',
+        hoverable: true
+      });
       data = {
         ...data,
         marks: { items: data?.marks?.items.filter((mark) => mark.id !== id) ?? [] }
       };
+    } else {
+      toastStore.trigger({
+        message: 'Error: Could not Remove Mark',
+        background: 'variant-filled-primary',
+        hoverable: true
+      });
     }
   }
 </script>

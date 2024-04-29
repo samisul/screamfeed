@@ -2,7 +2,7 @@
   import { getParsedFeeds } from '$lib/feed';
   import type { GenericFeedItem } from '$lib/feed/model';
   import { isLoading } from '../../../stores/global.store';
-  import { Accordion } from '@skeletonlabs/skeleton';
+  import { Accordion, getToastStore } from '@skeletonlabs/skeleton';
   import FeedOverview from '../components/FeedOverview.svelte';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
@@ -12,6 +12,8 @@
 
   let load = false;
   export let data: PageModel | undefined = undefined;
+
+  const toastStore = getToastStore();
 
   $: {
     if (load) {
@@ -33,10 +35,24 @@
 
   async function mark(item: GenericFeedItem) {
     $isLoading = true;
-    await addMark({
+    const _res = await addMark({
       item
     });
     $isLoading = false;
+    if (_res) {
+      toastStore.trigger({
+        message: 'Marked successfully.',
+        background: 'variant-filled-primary',
+        hoverable: true
+      });
+      load = true;
+    } else {
+      toastStore.trigger({
+        message: 'Failed to mark.',
+        background: 'variant-filled-primary',
+        hoverable: true
+      });
+    }
   }
 </script>
 
