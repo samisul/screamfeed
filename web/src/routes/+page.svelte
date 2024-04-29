@@ -3,10 +3,10 @@
   import { isLoggedIn } from '../stores/user.store';
   import Auth from './components/Auth.svelte';
   import Profile from './components/Profile.svelte';
-  import { goto } from '$app/navigation';
+  import { login } from '$lib/user';
 
   onMount(() => {
-    if (!$isLoggedIn) goto('/');
+    login();
   });
 </script>
 
