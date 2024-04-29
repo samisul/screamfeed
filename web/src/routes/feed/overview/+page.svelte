@@ -32,7 +32,9 @@
 
   async function mark(item: GenericFeedItem) {
     $isLoading = true;
-    await addMark(item);
+    await addMark({
+      item
+    });
     $isLoading = false;
   }
 </script>
@@ -43,4 +45,5 @@
       <FeedOverview on:mark={(e) => mark(e.detail)} {feed} />
     {/each}
   </Accordion>
+  <div class="text-center">No Feeds Found.</div>
 </div>

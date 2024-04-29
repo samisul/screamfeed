@@ -25,7 +25,9 @@ export class MarkService {
   }
 
   async get(userId: string): Promise<MarkDto[]> {
-    const marks = await this.markRepo.find({ where: { user: { id: userId } } });
-    return marks.map((mark) => MarkMappers.toDto(mark));
+    const _marks = await this.markRepo.find({
+      where: { user: { id: userId } },
+    });
+    return _marks.map((mark) => MarkMappers.toDto(mark));
   }
 }

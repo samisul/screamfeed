@@ -102,7 +102,7 @@
       </ul>
     </nav>
     {#if feedListRes?.items.length === 0}
-      <div class="text-center">No feeds found.</div>
+      <div class="text-center">No Feeds Found.</div>
     {/if}
   {/if}
 </div>
