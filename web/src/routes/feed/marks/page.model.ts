@@ -1,5 +1,6 @@
-import type { GenericFeedItem } from '$lib/feed/model';
+import type { ListRes } from '$lib/global';
+import type { MarkDto } from '$lib/mark/model';
 
 export interface PageModel {
-  marks: GenericFeedItem[];
+  marks: ListRes<MarkDto> | undefined;
 }
