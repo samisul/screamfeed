@@ -1,12 +1,15 @@
+import { GenericFeedItem } from 'src/feed/feed.model';
 import {
+  AfterInsert,
   AfterLoad,
+  BeforeInsert,
   Column,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
-import { FeedItemCache } from './feed-item-cache.entity';
 
+@Unique(['feedUrl'])
 @Entity({ name: '__cache__feed' })
 export class FeedCache {
   @PrimaryGeneratedColumn('uuid')
@@ -30,8 +33,8 @@ export class FeedCache {
   @Column({ type: 'varchar', nullable: true, default: '' })
   updated?: string;
 
-  @OneToMany(() => FeedItemCache, (item) => item.feedCacheId)
-  items: FeedItemCache[];
+  @Column({ type: 'longtext', nullable: true })
+  items: string;
 
   @Column({ type: 'boolean', default: false })
   isInvalid: boolean;
@@ -39,9 +42,18 @@ export class FeedCache {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
+  parsedItems: GenericFeedItem[];
+
   @AfterLoad()
   setIsInvalid() {
+    if (this.items) this.parsedItems = JSON.parse(this.items);
+    else this.parsedItems = [];
     if (this.isInvalid) return;
     this.isInvalid = new Date().getTime() - this.createdAt.getTime() > 86400000;
+  }
+
+  @BeforeInsert()
+  stringiftItems() {
+    this.items = JSON.stringify(this.parsedItems);
   }
 }

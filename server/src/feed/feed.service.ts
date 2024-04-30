@@ -86,6 +86,8 @@ export class FeedService {
     const _cachedFeeds =
       await this.feedCacheService.getCachesByFeedUrls(_feeds);
 
+    console.log('CACHED,', _cachedFeeds);
+
     if (_cachedFeeds && _cachedFeeds.length)
       _feeds = _feeds.filter(
         (f) => !_cachedFeeds.map((cf) => cf.feedUrl).includes(f),
