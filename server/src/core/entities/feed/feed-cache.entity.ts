@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Feed } from './feed.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { FeedItemCache } from './feed-item-cache.entity';
 
 @Entity({ name: '__cache__feed' })
@@ -36,9 +29,6 @@ export class FeedCache {
 
   @Column({ type: 'boolean', default: false })
   isInvalid: boolean;
-
-  @OneToOne(() => Feed, (feed) => feed.cache)
-  feed: Feed;
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
