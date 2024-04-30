@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { Feed } from 'src/core/entities/feed.entity';
+import { Feed } from 'src/core/entities/feed/feed.entity';
 import { User } from 'src/core/entities/user.entity';
 import { DataSource } from 'typeorm';
 

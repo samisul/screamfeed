@@ -2,7 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { DataModuleOptions } from './data.mode';
+import { DataModuleOptions } from './data.model';
 // import { createDatabase, dropDatabase } from 'typeorm-extension';
 
 @Module({})

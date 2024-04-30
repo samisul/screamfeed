@@ -1,4 +1,4 @@
-import { Feed } from 'src/core/entities/feed.entity';
+import { Feed } from 'src/core/entities/feed/feed.entity';
 import type {
   RSSFeed,
   RSSFeedItem,

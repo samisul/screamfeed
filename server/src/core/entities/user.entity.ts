@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Feed } from './feed.entity';
+import { Feed } from './feed/feed.entity';
 import { Mark } from './mark.entity';
 
 @Entity()

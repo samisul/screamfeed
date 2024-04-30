@@ -12,7 +12,7 @@ import { FeedService } from './feed.service';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { JwtPayload } from 'src/core/auth.model';
 import { AddFeedReq, GenericFeed } from './feed.model';
-import { Feed } from 'src/core/entities/feed.entity';
+import { Feed } from 'src/core/entities/feed/feed.entity';
 import { FeedDto } from 'src/core/dtos/feed.dto';
 import { ListRes } from 'src/core/dtos/global.dto';
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import { Feed } from 'src/core/entities/feed.entity';
+import { Feed } from 'src/core/entities/feed/feed.entity';
 import { User } from 'src/core/entities/user.entity';
 import { Repository } from 'typeorm';
 import {
