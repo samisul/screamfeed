@@ -7,6 +7,7 @@ import { User } from 'src/core/entities/user.entity';
 import { HttpModule } from '@nestjs/axios';
 import { FeedCache } from 'src/core/entities/feed/feed-cache.entity';
 import { FeedItemCache } from 'src/core/entities/feed/feed-item-cache.entity';
+import { FeedCacheService } from './cache/feed-cache.service';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { FeedItemCache } from 'src/core/entities/feed/feed-item-cache.entity';
     DataModule.forFeature([Feed, User, FeedCache, FeedItemCache]),
   ],
   controllers: [FeedController],
-  providers: [FeedService],
+  providers: [FeedService, FeedCacheService],
   exports: [],
 })
 export class FeedModule {}

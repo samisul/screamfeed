@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  AfterLoad,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { FeedItemCache } from './feed-item-cache.entity';
 
 @Entity({ name: '__cache__feed' })
@@ -32,4 +38,10 @@ export class FeedCache {
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @AfterLoad()
+  setIsInvalid() {
+    if (this.isInvalid) return;
+    this.isInvalid = new Date().getTime() - this.createdAt.getTime() > 86400000;
+  }
 }
