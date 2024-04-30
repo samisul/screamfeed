@@ -4,29 +4,33 @@ import { FeedCache } from 'src/core/entities/feed/feed-cache.entity';
 import { Repository } from 'typeorm';
 import { GenericFeed } from '../feed.model';
 import { FeedCacheMappers } from './feed-cache.mappers';
+import { FeedItemCache } from 'src/core/entities/feed/feed-item-cache.entity';
 
 @Injectable()
 export class FeedCacheService {
   constructor(
     @InjectRepository(FeedCache)
-    private readonly feedCache: Repository<FeedCache>,
+    private readonly feedCacheRepo: Repository<FeedCache>,
+    @InjectRepository(FeedItemCache)
+    private readonly feedItemCacheRepo: Repository<FeedItemCache>,
   ) {}
 
   async getCachesByFeedUrls(url: string[]): Promise<FeedCache[] | undefined> {
-    const _feeds = await this.feedCache
+    const _feeds = await this.feedCacheRepo
       .createQueryBuilder('feedCache')
       .where('feedCache.feedUrl IN (:...urls)', { urls: url })
+      .leftJoinAndSelect('feedCache.items', 'items')
       .getMany();
 
-    const _invalidFeeds = _feeds.filter((f) => f.isInvalid);
+    const _invalidFeeds = _feeds.filter((f) => f.isInvalid || !f.items.length);
     if (_invalidFeeds.length)
-      await this.feedCache.delete(_invalidFeeds.map((f) => f.id));
+      await this.feedCacheRepo.delete(_invalidFeeds.map((f) => f.id));
 
     return _feeds.filter((f) => !f.isInvalid);
   }
 
   async invalidateCacheById(id: string): Promise<void> {
-    await this.feedCache.update(id, { isInvalid: true });
+    await this.feedCacheRepo.update(id, { isInvalid: true });
   }
 
   async createCache(
@@ -34,15 +38,5 @@ export class FeedCacheService {
       url: string;
       parsedFeed: GenericFeed;
     }[],
-  ): Promise<FeedCache[]> {
-    const _caches = caches.map((c) => {
-      const _cache = this.feedCache.create(
-        FeedCacheMappers.toFeedCache(c.parsedFeed, c.url),
-      );
-      _cache.feedUrl = c.url;
-      return _cache;
-    });
-
-    return this.feedCache.save(_caches);
-  }
+  ): Promise<FeedCache[]> {}
 }

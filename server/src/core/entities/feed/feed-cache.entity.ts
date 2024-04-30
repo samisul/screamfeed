@@ -15,19 +15,19 @@ export class FeedCache {
   @Column({ type: 'varchar' })
   feedUrl: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', default: '' })
   title: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', default: '' })
   link: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, default: '' })
   description?: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, default: '' })
   language?: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, default: '' })
   updated?: string;
 
   @OneToMany(() => FeedItemCache, (item) => item.feedCacheId)
