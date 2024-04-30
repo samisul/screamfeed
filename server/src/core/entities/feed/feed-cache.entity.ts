@@ -1,6 +1,5 @@
 import { GenericFeedItem } from 'src/feed/feed.model';
 import {
-  AfterInsert,
   AfterLoad,
   BeforeInsert,
   Column,

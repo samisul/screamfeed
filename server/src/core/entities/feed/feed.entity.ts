@@ -1,12 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { FeedCache } from './feed-cache.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../user.entity';
 
 @Entity()
@@ -22,10 +14,6 @@ export class Feed {
 
   @ManyToMany(() => User, (user) => user.feeds, { onDelete: 'CASCADE' })
   users: User[];
-
-  @OneToOne(() => FeedCache)
-  @JoinColumn()
-  cache?: FeedCache;
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
