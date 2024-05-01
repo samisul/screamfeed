@@ -31,15 +31,16 @@ export class FeedService {
   ) {}
 
   async list(userId: string): Promise<FeedDto[]> {
-    const _userFeedUrls = (await this.get(userId)).map((f) => f.url);
+    const _userFeeds = await this.get(userId);
+
     const _feedsTheUserDoesntHave = await this.feedRepo
       .createQueryBuilder('feed')
-      .leftJoin('feed.users', 'user')
-      .where('user.id != :id', { id: userId })
-      .andWhere('feed.url NOT IN (:...urls)', { urls: _userFeedUrls })
+      .leftJoinAndSelect('feed.users', 'user')
       .getMany();
 
-    return _feedsTheUserDoesntHave.map((f) => FeedMappers.toFeedDto(f));
+    return _feedsTheUserDoesntHave
+      .filter((f) => !_userFeeds.map((uf) => uf.url).includes(f.url))
+      .map((f) => FeedMappers.toFeedDto(f));
   }
 
   async add(feedDto: AddFeedReq, userId: string): Promise<Feed | undefined> {
@@ -81,14 +82,14 @@ export class FeedService {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return [];
 
-    const _pagedWords = await this.feedRepo
+    const _feeds = await this.feedRepo
       .createQueryBuilder('feed')
       .leftJoin('feed.users', 'user')
       .where('user.id = :id', { id: userId })
       .orderBy('feed.createdAt', 'DESC')
       .getMany();
 
-    return _pagedWords.map((f) => FeedMappers.toFeedDto(f));
+    return _feeds.map((f) => FeedMappers.toFeedDto(f));
   }
 
   async getParsedFeedsFromURLs(
