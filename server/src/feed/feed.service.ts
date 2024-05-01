@@ -87,14 +87,10 @@ export class FeedService {
     const _cachedFeeds: FeedCache[] = [];
     let _feeds = feedURLs ?? (await this.get(userId)).map((f) => f.url);
 
-    console.log(typeof refresh);
-    console.log(refresh === false);
-    if (refresh === false) {
-      console.log('=========================== Getting cached feeds');
+    if (refresh === false)
       _cachedFeeds.push(
         ...((await this.feedCacheService.getCachesByFeedUrls(_feeds)) ?? []),
       );
-    }
 
     if (_cachedFeeds && _cachedFeeds.length)
       _feeds = _feeds.filter(
