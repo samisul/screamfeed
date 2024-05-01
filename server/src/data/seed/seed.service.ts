@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/core/entities/user.entity';
-import { Feed } from 'src/core/entities/feed.entity';
 import { EntityManager } from 'typeorm';
 import { feedSeed } from './data/feed.seed';
 import { userSeed } from './data/user.seed';
+import { Feed } from 'src/core/entities/feed/feed.entity';
 
 @Injectable()
 export class SeedService {

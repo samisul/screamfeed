@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import { Feed } from 'src/core/entities/feed.entity';
+import { Feed } from 'src/core/entities/feed/feed.entity';
 import { User } from 'src/core/entities/user.entity';
 import { Repository } from 'typeorm';
 import {
@@ -15,6 +15,9 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { FeedMappers } from './feed.mappers';
 import { FeedDto } from 'src/core/dtos/feed.dto';
+import { FeedCacheService } from './cache/feed-cache.service';
+import { FeedCacheMappers } from './cache/feed-cache.mappers';
+import { FeedCache } from 'src/core/entities/feed/feed-cache.entity';
 
 @Injectable()
 export class FeedService {
@@ -24,6 +27,7 @@ export class FeedService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Feed) private readonly feedRepo: Repository<Feed>,
     private readonly httpService: HttpService,
+    private readonly feedCacheService: FeedCacheService,
   ) {}
 
   async add(feedDto: AddFeedReq, userId: string): Promise<Feed | undefined> {
@@ -77,11 +81,24 @@ export class FeedService {
 
   async getParsedFeedsFromURLs(
     userId: string,
+    refresh: boolean,
     feedURLs?: string[],
   ): Promise<GenericFeed[]> {
-    const _feeds = feedURLs ?? (await this.get(userId)).map((f) => f.url);
+    const _cachedFeeds: FeedCache[] = [];
+    let _feeds = feedURLs ?? (await this.get(userId)).map((f) => f.url);
 
-    return (await this.getFeedsFromURLs(_feeds))
+    if (refresh === false)
+      _cachedFeeds.push(
+        ...((await this.feedCacheService.getCachesByFeedUrls(_feeds)) ?? []),
+      );
+
+    if (_cachedFeeds && _cachedFeeds.length)
+      _feeds = _feeds.filter(
+        (f) => !_cachedFeeds.map((cf) => cf.feedUrl).includes(f),
+      );
+
+    const _parsedFeedsToCache: { url: string; parsedFeed: GenericFeed }[] = [];
+    const _parsedFeeds = (await this.getFeedsFromURLs(_feeds))
       .map((feed) => {
         const _parsedFeed = this.parser.parse(feed.feed ?? '');
         if (this.isRSSFeed(_parsedFeed))
@@ -97,7 +114,22 @@ export class FeedService {
         return undefined;
       })
       .filter((f) => !!f)
-      .map((f) => FeedMappers.toGenericFeed(f!.feed as FeedRes, f?.url ?? ''));
+      .map((f) => {
+        const _genericFeed = FeedMappers.toGenericFeed(
+          f!.feed as FeedRes,
+          f?.url ?? '',
+        );
+        _parsedFeedsToCache.push({ url: f!.url, parsedFeed: _genericFeed });
+        return _genericFeed;
+      });
+
+    if (_parsedFeedsToCache.length)
+      await this.feedCacheService.createCache(_parsedFeedsToCache);
+
+    return [
+      ..._parsedFeeds,
+      ...(_cachedFeeds ?? []).map(FeedCacheMappers.toGenericFeed),
+    ];
   }
 
   private async getFeedsFromURLs(feedURLs: string[]) {

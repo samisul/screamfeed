@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -12,9 +13,10 @@ import { FeedService } from './feed.service';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { JwtPayload } from 'src/core/auth.model';
 import { AddFeedReq, GenericFeed } from './feed.model';
-import { Feed } from 'src/core/entities/feed.entity';
+import { Feed } from 'src/core/entities/feed/feed.entity';
 import { FeedDto } from 'src/core/dtos/feed.dto';
 import { ListRes } from 'src/core/dtos/global.dto';
+import { BooleanTransformer } from 'src/core/transformers/boolean.transformer';
 
 @UseGuards(LoggedInGuard)
 @Controller('feeds')
@@ -33,9 +35,11 @@ export class FeedController {
   async getParsedFeeds(
     @Req() req: Request & { user: JwtPayload },
     @Body() body: { urls?: string[] },
+    @Query('refresh', BooleanTransformer) refresh?: boolean,
   ): Promise<ListRes<GenericFeed>> {
     const _parsedFeeds = await this.feedService.getParsedFeedsFromURLs(
       req.user.sub,
+      refresh ?? false,
       body.urls,
     );
     return { items: _parsedFeeds };
