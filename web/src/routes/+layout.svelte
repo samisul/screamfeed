@@ -14,6 +14,8 @@
   import FeedItemContent from './feed/components/FeedItemContent.svelte';
   import { initializeStores as initToastStore, Toast } from '@skeletonlabs/skeleton';
   import { isLoggedIn } from '../stores/user.store';
+  import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
 
   initModalStore();
   initToastStore();
@@ -21,6 +23,32 @@
   const modalRegistry: Record<string, ModalComponent> = {
     feedItemContent: { ref: FeedItemContent }
   };
+
+  onMount(() => {
+    const _listener = (document.onkeyup = (e) => {
+      switch (e.key) {
+        case '1':
+          goto('/');
+          break;
+        case '2':
+          goto('/feed/list');
+          break;
+        case '3':
+          goto('/feed/overview');
+          break;
+        case '4':
+          goto('/feed/marks');
+          break;
+        case '5':
+          goto('/feed/inout');
+          break;
+      }
+    });
+
+    return () => {
+      document.removeEventListener('keydown', _listener);
+    };
+  });
 </script>
 
 <Toast rounded="rounded-none" position="bl" max={4} padding="p-3" buttonDismiss="bg-transparent" />
