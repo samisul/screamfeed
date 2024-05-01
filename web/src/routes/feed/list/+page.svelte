@@ -63,13 +63,31 @@
       return;
     }
     load = true;
+    toastStore.trigger({
+      message: 'URL Added',
+      background: 'variant-filled-primary',
+      hoverable: true
+    });
   }
 
   async function remove(id: string) {
     $isLoading = true;
-    await removeFeed(id);
+    const _res = await removeFeed(id);
     $isLoading = false;
+    if (!_res) {
+      toastStore.trigger({
+        message: 'Error: Could not Remove URL',
+        background: 'variant-filled-primary',
+        hoverable: true
+      });
+      return;
+    }
     load = true;
+    toastStore.trigger({
+      message: 'URL Removed',
+      background: 'variant-filled-primary',
+      hoverable: true
+    });
   }
 </script>
 
