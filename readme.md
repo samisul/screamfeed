@@ -15,6 +15,7 @@
 - [ ] search feeds
 - [ ] categorize feeds
 - [ ] snapshot item as image
+- [ ] tool to fetch rss feeds from popular websites (e.g. reddit, youtube, etc.)
       **_... more to come ..._**
 
 ### Self-hosting
