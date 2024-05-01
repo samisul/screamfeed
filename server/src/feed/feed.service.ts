@@ -75,6 +75,12 @@ export class FeedService {
     if (!feed) return;
 
     feed.users = feed.users.filter((u) => u.id !== user.id);
+
+    if (!feed.users.length) {
+      await this.feedRepo.remove(feed);
+      return;
+    }
+
     await this.feedRepo.save(feed);
   }
 
