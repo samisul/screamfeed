@@ -23,3 +23,7 @@ export async function addFeed(req: AddFeedReq): Promise<FeedDto | undefined> {
 export async function removeFeed(id: string): Promise<boolean> {
   return await del(`${FEED_URL}/${id}`);
 }
+
+export async function list(): Promise<ListRes<FeedDto> | undefined> {
+  return await get<ListRes<FeedDto>>(`${FEED_URL}/list`);
+}
