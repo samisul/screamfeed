@@ -17,6 +17,7 @@ import { FeedMappers } from './feed.mappers';
 import { FeedDto } from 'src/core/dtos/feed.dto';
 import { FeedCacheService } from './cache/feed-cache.service';
 import { FeedCacheMappers } from './cache/feed-cache.mappers';
+import { FeedCache } from 'src/core/entities/feed/feed-cache.entity';
 
 @Injectable()
 export class FeedService {
@@ -80,11 +81,20 @@ export class FeedService {
 
   async getParsedFeedsFromURLs(
     userId: string,
+    refresh: boolean,
     feedURLs?: string[],
   ): Promise<GenericFeed[]> {
+    const _cachedFeeds: FeedCache[] = [];
     let _feeds = feedURLs ?? (await this.get(userId)).map((f) => f.url);
-    const _cachedFeeds =
-      await this.feedCacheService.getCachesByFeedUrls(_feeds);
+
+    console.log(typeof refresh);
+    console.log(refresh === false);
+    if (refresh === false) {
+      console.log('=========================== Getting cached feeds');
+      _cachedFeeds.push(
+        ...((await this.feedCacheService.getCachesByFeedUrls(_feeds)) ?? []),
+      );
+    }
 
     if (_cachedFeeds && _cachedFeeds.length)
       _feeds = _feeds.filter(
@@ -117,7 +127,8 @@ export class FeedService {
         return _genericFeed;
       });
 
-    await this.feedCacheService.createCache(_parsedFeedsToCache);
+    if (_parsedFeedsToCache.length)
+      await this.feedCacheService.createCache(_parsedFeedsToCache);
 
     return [
       ..._parsedFeeds,

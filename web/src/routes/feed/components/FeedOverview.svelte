@@ -8,7 +8,7 @@
   export let feed: GenericFeed;
 
   async function refreshFeed() {
-    const _feeds = await getParsedFeeds([feed.feedUrl]);
+    const _feeds = await getParsedFeeds([feed.feedUrl], true);
     if (!_feeds) return;
     feed = { ..._feeds.items[0] };
   }

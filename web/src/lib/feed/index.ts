@@ -9,8 +9,11 @@ export async function getFeedUrls(): Promise<ListRes<FeedDto> | undefined> {
   return await get<ListRes<FeedDto>>(`${FEED_URL}`);
 }
 
-export async function getParsedFeeds(urls?: string[]): Promise<ListRes<GenericFeed> | undefined> {
-  return await post<ListRes<GenericFeed>>(`${FEED_URL}/parsed`, { urls });
+export async function getParsedFeeds(
+  urls?: string[],
+  refresh = false
+): Promise<ListRes<GenericFeed> | undefined> {
+  return await post<ListRes<GenericFeed>>(`${FEED_URL}/parsed?refresh=${refresh}`, { urls });
 }
 
 export async function addFeed(req: AddFeedReq): Promise<FeedDto | undefined> {

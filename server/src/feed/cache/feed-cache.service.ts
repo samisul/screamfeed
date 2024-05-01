@@ -12,15 +12,16 @@ export class FeedCacheService {
     private readonly feedCacheRepo: Repository<FeedCache>,
   ) {}
 
-  async getCachesByFeedUrls(url: string[]): Promise<FeedCache[] | undefined> {
+  async getCachesByFeedUrls(urls: string[]): Promise<FeedCache[] | undefined> {
     const _feeds = await this.feedCacheRepo
       .createQueryBuilder('feedCache')
-      .where('feedCache.feedUrl IN (:...urls)', { urls: url })
+      .where('feedCache.feedUrl IN (:...urls)', { urls })
       .getMany();
 
     const _invalidFeeds = _feeds.filter(
       (f) => f.isInvalid || !f.parsedItems.length,
     );
+
     if (_invalidFeeds.length)
       await this.feedCacheRepo.delete(_invalidFeeds.map((f) => f.id));
 
@@ -37,6 +38,14 @@ export class FeedCacheService {
       parsedFeed: GenericFeed;
     }[],
   ): Promise<FeedCache[]> {
+    this.feedCacheRepo
+      .createQueryBuilder()
+      .delete()
+      .where('feedUrl IN (:...urls)', {
+        urls: caches.map((cache) => cache.url),
+      })
+      .execute();
+
     const _feedCaches = caches.map((cache) => {
       const cacheFeed = FeedCacheMappers.toFeedCache(
         cache.parsedFeed,
