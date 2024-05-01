@@ -60,11 +60,6 @@ export const feedSeed = [
     url: 'https://www.reddit.com/r/aww/.rss',
   },
   {
-    id: '33c908bf-f110-4c7a-81d7-caf0108c71b1',
-    title: 'Netflix - Press Releases',
-    url: 'https://ir.netflix.net/rss/pressrelease.aspx',
-  },
-  {
     id: '32c908bf-f110-4c7a-81d7-caf0008c71b1',
     title: 'Reddit - r/linux',
     url: 'https://www.reddit.com/r/linux/.rss',

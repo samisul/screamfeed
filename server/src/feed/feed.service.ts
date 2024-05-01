@@ -153,7 +153,12 @@ export class FeedService {
     ];
   }
 
-  private async getFeedsFromURLs(feedURLs: string[]) {
+  private async getFeedsFromURLs(feedURLs: string[]): Promise<
+    {
+      urls: string;
+      feed: string | undefined;
+    }[]
+  > {
     return (
       await Promise.all(
         feedURLs.map(async (feedURL) => ({
