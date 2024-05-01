@@ -60,4 +60,12 @@ export class FeedController {
   ): Promise<void> {
     await this.feedService.remove(id, req.user.sub);
   }
+
+  @Get('list')
+  async list(
+    @Req() req: Request & { user: JwtPayload },
+  ): Promise<ListRes<FeedDto>> {
+    const _feeds = await this.feedService.list(req.user.sub);
+    return { items: _feeds };
+  }
 }

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { addFeed, getFeedUrls, removeFeed } from '$lib/feed/index';
+  import { addFeed, getFeedUrls, list, removeFeed } from '$lib/feed/index';
   import { CheckCircleSolid } from 'flowbite-svelte-icons';
   import { isLoading } from '../../../stores/global.store';
   import FeedUrl from '../components/FeedUrl.svelte';
   import { onMount } from 'svelte';
   import { isLoggedIn } from '../../../stores/user.store';
   import { goto } from '$app/navigation';
-  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { Accordion, AccordionItem, getToastStore } from '@skeletonlabs/skeleton';
   import { invalidUrl } from '$lib/helpers';
   import type { PageModel } from './page.model';
 
@@ -93,14 +93,34 @@
   </div>
 
   {#if data?.feeds}
-    <nav class="list-nav w-full">
-      <ul>
-        {#each data?.feeds.items ?? [] as item}
-          <FeedUrl {item} on:remove={(id) => remove(id.detail)} />
-        {:else}
-          <div class="text-center">No Feeds Found.</div>
-        {/each}
-      </ul>
-    </nav>
+    <ul class="w-full">
+      {#each data?.feeds.items ?? [] as item}
+        <FeedUrl isDeletable {item} on:remove={(id) => remove(id.detail)} />
+      {:else}
+        <div class="text-center">No Feeds Found.</div>
+      {/each}
+    </ul>
   {/if}
+  <Accordion>
+    {#await list() then list}
+      <AccordionItem class="w-full">
+        <svelte:fragment slot="summary">Recommendations</svelte:fragment>
+        <svelte:fragment slot="content">
+          <ul class="w-full text-sm">
+            {#each list?.items ?? [] as item}
+              <FeedUrl
+                isAddable
+                on:add={(url) => {
+                  form.url = url.detail;
+                  add();
+                }}
+                {item}
+                on:remove={(id) => remove(id.detail)}
+              />
+            {/each}
+          </ul>
+        </svelte:fragment>
+      </AccordionItem>
+    {/await}
+  </Accordion>
 </div>

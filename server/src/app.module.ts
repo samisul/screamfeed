@@ -29,7 +29,6 @@ export class AppModule implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    const _IS_DEV_MODE = this.configService.get('NODE_ENV') === 'dev';
-    if (_IS_DEV_MODE) await this.seedService.seed();
+    await this.seedService.seed();
   }
 }

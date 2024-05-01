@@ -28,7 +28,7 @@ export class DataModule {
               database: configService.getOrThrow<string>('DB_NAME'),
               synchronize: dataModuleOptions?.synchronize ?? true,
               autoLoadEntities: dataModuleOptions?.autoLoadEntities ?? true,
-              logging: dataModuleOptions?.logging ?? false,
+              logging: dataModuleOptions?.logging ?? true,
               migrations: [__dirname + '/migrations/*{.ts,.js}'],
               migrationsRun: dataModuleOptions?.migrationsRun ?? true,
               dropSchema:

@@ -30,12 +30,25 @@ export class FeedService {
     private readonly feedCacheService: FeedCacheService,
   ) {}
 
+  async list(userId: string): Promise<FeedDto[]> {
+    const _userFeeds = await this.get(userId);
+
+    const _feedsTheUserDoesntHave = await this.feedRepo
+      .createQueryBuilder('feed')
+      .leftJoinAndSelect('feed.users', 'user')
+      .getMany();
+
+    return _feedsTheUserDoesntHave
+      .filter((f) => !_userFeeds.map((uf) => uf.url).includes(f.url))
+      .map((f) => FeedMappers.toFeedDto(f));
+  }
+
   async add(feedDto: AddFeedReq, userId: string): Promise<Feed | undefined> {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return;
 
     const feed = await this.feedRepo.findOne({
-      where: { url: feedDto.url },
+      where: { url: feedDto.url, users: { id: userId } },
       relations: ['users'],
     });
 
@@ -69,14 +82,14 @@ export class FeedService {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return [];
 
-    const _pagedWords = await this.feedRepo
+    const _feeds = await this.feedRepo
       .createQueryBuilder('feed')
       .leftJoin('feed.users', 'user')
       .where('user.id = :id', { id: userId })
       .orderBy('feed.createdAt', 'DESC')
       .getMany();
 
-    return _pagedWords.map((f) => FeedMappers.toFeedDto(f));
+    return _feeds.map((f) => FeedMappers.toFeedDto(f));
   }
 
   async getParsedFeedsFromURLs(
@@ -87,12 +100,14 @@ export class FeedService {
     const _cachedFeeds: FeedCache[] = [];
     let _feeds = feedURLs ?? (await this.get(userId)).map((f) => f.url);
 
+    if (!_feeds.length) return [];
+
     if (refresh === false)
       _cachedFeeds.push(
         ...((await this.feedCacheService.getCachesByFeedUrls(_feeds)) ?? []),
       );
 
-    if (_cachedFeeds && _cachedFeeds.length)
+    if (_cachedFeeds.length)
       _feeds = _feeds.filter(
         (f) => !_cachedFeeds.map((cf) => cf.feedUrl).includes(f),
       );

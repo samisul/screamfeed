@@ -5,10 +5,8 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 
-@Unique(['feedUrl'])
 @Entity({ name: '__cache__feed' })
 export class FeedCache {
   @PrimaryGeneratedColumn('uuid')
