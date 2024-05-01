@@ -111,8 +111,8 @@
               <FeedUrl
                 isAddable
                 on:add={(url) => {
-                  form.url = url.detail;
-                  add();
+                  form.url = url.detail.url;
+                  form.title = url.detail.title;
                 }}
                 {item}
                 on:remove={(id) => remove(id.detail)}

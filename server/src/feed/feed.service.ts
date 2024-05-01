@@ -48,7 +48,7 @@ export class FeedService {
     if (!user) return;
 
     const feed = await this.feedRepo.findOne({
-      where: { url: feedDto.url, users: { id: userId } },
+      where: { url: feedDto.url, title: feedDto.title },
       relations: ['users'],
     });
 

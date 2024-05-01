@@ -21,7 +21,7 @@
     </button>
   {/if}
   {#if isAddable}
-    <button on:click={() => dispatch('add', item.url)} type="button" class="btn bg-initial">
+    <button on:click={() => dispatch('add', item)} type="button" class="btn bg-initial">
       <PlusOutline />
     </button>
   {/if}
