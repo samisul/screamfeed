@@ -101,12 +101,14 @@ export class FeedService {
     const _cachedFeeds: FeedCache[] = [];
     let _feeds = feedURLs ?? (await this.get(userId)).map((f) => f.url);
 
+    if (!_feeds.length) return [];
+
     if (refresh === false)
       _cachedFeeds.push(
         ...((await this.feedCacheService.getCachesByFeedUrls(_feeds)) ?? []),
       );
 
-    if (_cachedFeeds && _cachedFeeds.length)
+    if (_cachedFeeds.length)
       _feeds = _feeds.filter(
         (f) => !_cachedFeeds.map((cf) => cf.feedUrl).includes(f),
       );
