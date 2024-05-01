@@ -13,6 +13,7 @@
   import { initializeStores as initModalStore, Modal } from '@skeletonlabs/skeleton';
   import FeedItemContent from './feed/components/FeedItemContent.svelte';
   import { initializeStores as initToastStore, Toast } from '@skeletonlabs/skeleton';
+  import { isLoggedIn } from '../stores/user.store';
 
   initModalStore();
   initToastStore();
@@ -36,24 +37,26 @@
   <TabAnchor href="/" selected={$page.url.pathname === '/'}>
     <svelte:fragment slot="lead"><ProfileCardSolid></ProfileCardSolid></svelte:fragment>
   </TabAnchor>
-  <TabAnchor href="/feed/list" selected={$page.url.pathname.includes('/feed/list')}>
-    <svelte:fragment slot="lead"><PenNibSolid></PenNibSolid></svelte:fragment>
-  </TabAnchor>
-  <TabAnchor href="/feed/overview" selected={$page.url.pathname.includes('/feed/overview')}>
-    <svelte:fragment slot="lead">
-      <NewspaperSolid></NewspaperSolid>
-    </svelte:fragment>
-  </TabAnchor>
-  <TabAnchor href="/feed/marks" selected={$page.url.pathname.includes('/feed/marks')}>
-    <svelte:fragment slot="lead">
-      <MapPinSolid></MapPinSolid>
-    </svelte:fragment>
-  </TabAnchor>
-  <TabAnchor href="/feed/inout" selected={$page.url.pathname.includes('/feed/inout')}>
-    <svelte:fragment slot="lead">
-      <FileImportSolid></FileImportSolid>
-    </svelte:fragment>
-  </TabAnchor>
+  {#if $isLoggedIn}
+    <TabAnchor href="/feed/list" selected={$page.url.pathname.includes('/feed/list')}>
+      <svelte:fragment slot="lead"><PenNibSolid></PenNibSolid></svelte:fragment>
+    </TabAnchor>
+    <TabAnchor href="/feed/overview" selected={$page.url.pathname.includes('/feed/overview')}>
+      <svelte:fragment slot="lead">
+        <NewspaperSolid></NewspaperSolid>
+      </svelte:fragment>
+    </TabAnchor>
+    <TabAnchor href="/feed/marks" selected={$page.url.pathname.includes('/feed/marks')}>
+      <svelte:fragment slot="lead">
+        <MapPinSolid></MapPinSolid>
+      </svelte:fragment>
+    </TabAnchor>
+    <TabAnchor href="/feed/inout" selected={$page.url.pathname.includes('/feed/inout')}>
+      <svelte:fragment slot="lead">
+        <FileImportSolid></FileImportSolid>
+      </svelte:fragment>
+    </TabAnchor>
+  {/if}
 </TabGroup>
 {#if $isLoading}
   <ProgressBar rounded="rounded-none" height="h-[4px]" />
