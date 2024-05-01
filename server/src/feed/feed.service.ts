@@ -30,12 +30,26 @@ export class FeedService {
     private readonly feedCacheService: FeedCacheService,
   ) {}
 
+  async list(userId: string): Promise<FeedDto[]> {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) return [];
+
+    const _pagedWords = await this.feedRepo
+      .createQueryBuilder('feed')
+      .leftJoin('feed.users', 'user')
+      .where('user.id != :id', { id: userId })
+      .orderBy('feed.createdAt', 'DESC')
+      .getMany();
+
+    return _pagedWords.map((f) => FeedMappers.toFeedDto(f));
+  }
+
   async add(feedDto: AddFeedReq, userId: string): Promise<Feed | undefined> {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return;
 
     const feed = await this.feedRepo.findOne({
-      where: { url: feedDto.url },
+      where: { url: feedDto.url, users: { id: userId } },
       relations: ['users'],
     });
 

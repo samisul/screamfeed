@@ -14,7 +14,8 @@ export class SeedService {
     const _feeds = this.entityManager.create(Feed, feedSeed);
 
     await this.entityManager.save(Feed, _feeds);
-    _users[0].feeds = _feeds;
+    _users[0].feeds = [_feeds[0]];
+    _users[1].feeds = [_feeds[1], _feeds[2]];
     await this.entityManager.save(User, _users);
   }
 }
