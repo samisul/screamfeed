@@ -9,6 +9,7 @@ import type {
   GenericFeed,
 } from './feed.model';
 import { FeedDto } from 'src/core/dtos/feed.dto';
+import { findHTMLProp } from 'src/core/helpers';
 
 export class FeedMappers {
   static toFeedDto(feed: Feed): FeedDto {
@@ -100,11 +101,17 @@ export class FeedMappers {
   private static atomFeedEntryToGenericFeedItem(
     entry: AtomFeedEntry,
   ): GenericFeedItem {
+    // todo: is this retarded?
+    let content = '';
+    if (typeof entry.summary === 'object')
+      content = findHTMLProp(entry.summary);
+    else if (typeof entry.summary === 'string') content = entry.summary;
+
     return {
       id: entry.id,
       title: entry.title,
       link: entry.link,
-      content: entry.summary,
+      content: content,
       date: entry.updated,
     };
   }
