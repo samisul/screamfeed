@@ -39,6 +39,6 @@ export class LoggedInGuard implements CanActivate {
   private exteatTokenFromCookie(
     req: Request & { cookies: Record<string, string> },
   ): LoginResDto {
-    return JSON.parse(req.cookies['SCREAMFEED_TOKENS']);
+    return JSON.parse(req.cookies['SCREAMFEED_TOKENS'] ?? '{}');
   }
 }

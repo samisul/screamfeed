@@ -39,6 +39,9 @@ export class UserService {
     if (_tokenPayload.type !== 'refresh')
       throw new HttpException('INVALID_PAYLOAD', HttpStatus.BAD_REQUEST);
 
+    if (!_tokenPayload.sub)
+      throw new HttpException('INVALID_PAYLOAD', HttpStatus.BAD_REQUEST);
+
     return await this.signTokens(
       await this.usersRepo.findOneByOrFail({
         id: _tokenPayload.sub,
