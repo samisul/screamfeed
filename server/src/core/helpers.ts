@@ -1,5 +1,5 @@
-import { Axios } from 'axios';
 import { NodeType, parse } from 'node-html-parser';
+import axios from 'axios';
 
 export class Helpers {
   private static readonly types = [
@@ -30,8 +30,7 @@ export class Helpers {
   }
 
   static async findRSSFeed(url: string): Promise<string[]> {
-    const _client = new Axios();
-    const response = await _client.get(url);
+    const response = await axios.get(url);
     const doc = parse(response.data);
     const _rssLink: string[] = [];
 
