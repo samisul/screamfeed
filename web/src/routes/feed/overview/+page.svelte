@@ -13,6 +13,7 @@
 
   let load = false;
   let search = '';
+  let searchEl: HTMLInputElement | undefined = undefined;
   export let data: PageModel | undefined = undefined;
 
   let items: GenericFeed[] = [];
@@ -32,6 +33,8 @@
 
     const _listener = (document.onkeydown = (e) => {
       if (e.key === 'Enter') onSearchSubmit();
+      else if (e.key === 'k' && e.ctrlKey) searchEl?.focus();
+      else if (e.key === 'Escape') searchEl?.blur();
     });
 
     return () => document.removeEventListener('keydown', _listener);
@@ -94,7 +97,7 @@
     <div class="input-group-shim">
       <SearchSolid></SearchSolid>
     </div>
-    <input type="search" placeholder="Search..." bind:value={search} />
+    <input type="search" placeholder="Search..." bind:value={search} bind:this={searchEl} />
     <button class="variant-filled-primary" on:click={onSearchSubmit}>Submit</button>
   </div>
   <Accordion>
