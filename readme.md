@@ -12,10 +12,11 @@
 - [x] import feeds
 - [x] mark feed items & view them
 - [x] list available feeds added by other users
-- [ ] search feeds
+- [x] search feeds
 - [ ] categorize feeds
 - [ ] snapshot item as image
-- [ ] tool to fetch rss feeds from popular websites (e.g. reddit, youtube, etc.)
+- [x] tool to fetch rss feeds from popular websites (e.g. reddit, youtube, etc.)
+- [ ] settings menu to hide stuff like search bar, mark button, mark page, etc.
       **_... more to come ..._**
 
 ### Self-hosting
