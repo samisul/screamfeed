@@ -40,7 +40,7 @@
           goto('/feed/marks');
           break;
         case '5':
-          goto('/misc/inout');
+          goto('/misc/quick-feed');
           break;
       }
     });
@@ -79,12 +79,12 @@
         <MapPinSolid></MapPinSolid>
       </svelte:fragment>
     </TabAnchor>
-    <TabAnchor href="/misc/inout" selected={$page.url.pathname.includes('/misc/inout')}>
-      <svelte:fragment slot="lead">
-        <CogSolid></CogSolid>
-      </svelte:fragment>
-    </TabAnchor>
   {/if}
+  <TabAnchor href="/misc/quick-feed" selected={$page.url.pathname.includes('/misc/quick-feed')}>
+    <svelte:fragment slot="lead">
+      <CogSolid></CogSolid>
+    </svelte:fragment>
+  </TabAnchor>
 </TabGroup>
 {#if $isLoading}
   <ProgressBar rounded="rounded-none" height="h-[4px]" />

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { ProgressBar, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
-  import { FileImportSolid } from 'flowbite-svelte-icons';
+  import { FileImportSolid, NewspaperOutline, LinkOutline } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
   import { isLoading } from '../../stores/global.store';
+  import { isLoggedIn } from '../../stores/user.store';
 </script>
 
 <TabGroup
@@ -12,13 +13,25 @@
   flex="flex-1 lg:flex-none"
   rounded=""
   border=""
-  class="bg-surface-100-800-token w-full"
+  class=" w-full"
 >
-  <TabAnchor href="/misc/inout" selected={$page.url.pathname === '/misc/inout'}>
+  <TabAnchor href="/misc/quick-feed" selected={$page.url.pathname === '/misc/quick-feed'}>
     <svelte:fragment slot="lead">
-      <FileImportSolid></FileImportSolid>
+      <NewspaperOutline></NewspaperOutline>
     </svelte:fragment>
   </TabAnchor>
+  <TabAnchor href="/misc/get-feed-link" selected={$page.url.pathname === '/misc/get-feed-link'}>
+    <svelte:fragment slot="lead">
+      <LinkOutline></LinkOutline>
+    </svelte:fragment>
+  </TabAnchor>
+  {#if $isLoggedIn}
+    <TabAnchor href="/misc/inout" selected={$page.url.pathname === '/misc/inout'}>
+      <svelte:fragment slot="lead">
+        <FileImportSolid></FileImportSolid>
+      </svelte:fragment>
+    </TabAnchor>
+  {/if}
 </TabGroup>
 {#if $isLoading}
   <ProgressBar rounded="rounded-none" height="h-[4px]" />
