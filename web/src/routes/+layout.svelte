@@ -76,16 +76,16 @@
         <MapPinSolid></MapPinSolid>
       </svelte:fragment>
     </TabAnchor>
+    <TabAnchor
+      href="/feed/find"
+      selected={$page.url.pathname.includes('/feed/find') ||
+        $page.url.pathname.includes('/feed/inout')}
+    >
+      <svelte:fragment slot="lead">
+        <CogSolid></CogSolid>
+      </svelte:fragment>
+    </TabAnchor>
   {/if}
-  <TabAnchor
-    href="/feed/find"
-    selected={$page.url.pathname.includes('/feed/find') ||
-      $page.url.pathname.includes('/feed/inout')}
-  >
-    <svelte:fragment slot="lead">
-      <CogSolid></CogSolid>
-    </svelte:fragment>
-  </TabAnchor>
 </TabGroup>
 {#if $isLoading}
   <ProgressBar rounded="rounded-none" height="h-[4px]" />
