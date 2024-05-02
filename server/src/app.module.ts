@@ -1,18 +1,16 @@
 import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { env } from 'process';
 import { DataModule } from './data/data.module';
 import { SeedService } from './data/seed/seed.service';
-import { env } from 'process';
-import { UserModule } from './user/user.module';
 import { FeedModule } from './feed/feed.module';
 import { MarkModule } from './mark/mark.module';
-import { MiscModule } from './misc/misc.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     UserModule,
     FeedModule,
-    MiscModule,
     MarkModule,
     DataModule.forRoot(),
     ConfigModule.forRoot({
@@ -20,7 +18,6 @@ import { MiscModule } from './misc/misc.module';
       isGlobal: true,
     }),
     MarkModule,
-    MiscModule,
   ],
   controllers: [],
   providers: [SeedService, Logger],

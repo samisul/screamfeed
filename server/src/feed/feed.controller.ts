@@ -17,12 +17,16 @@ import { Feed } from 'src/core/entities/feed/feed.entity';
 import { FeedDto } from 'src/core/dtos/feed.dto';
 import { ListRes } from 'src/core/dtos/global.dto';
 import { BooleanTransformer } from 'src/core/transformers/boolean.transformer';
+import { FindFeedService } from './find-feed.service';
 
-@UseGuards(LoggedInGuard)
 @Controller('feeds')
 export class FeedController {
-  constructor(private readonly feedService: FeedService) {}
+  constructor(
+    private readonly feedService: FeedService,
+    private readonly findFeedService: FindFeedService,
+  ) {}
 
+  @UseGuards(LoggedInGuard)
   @Get()
   async getFeeds(
     @Req() req: Request & { user: JwtPayload },
@@ -31,6 +35,7 @@ export class FeedController {
     return { items: _feeds };
   }
 
+  @UseGuards(LoggedInGuard)
   @Post('parsed')
   async getParsedFeeds(
     @Req() req: Request & { user: JwtPayload },
@@ -45,6 +50,7 @@ export class FeedController {
     return { items: _parsedFeeds };
   }
 
+  @UseGuards(LoggedInGuard)
   @Post()
   async addFeed(
     @Req() req: Request & { user: JwtPayload },
@@ -53,6 +59,7 @@ export class FeedController {
     return await this.feedService.add(body, req.user.sub);
   }
 
+  @UseGuards(LoggedInGuard)
   @Delete(':id')
   async remove(
     @Param('id') id: string,
@@ -61,11 +68,18 @@ export class FeedController {
     await this.feedService.remove(id, req.user.sub);
   }
 
+  @UseGuards(LoggedInGuard)
   @Get('list')
   async list(
     @Req() req: Request & { user: JwtPayload },
   ): Promise<ListRes<FeedDto>> {
     const _feeds = await this.feedService.list(req.user.sub);
     return { items: _feeds };
+  }
+
+  @Get('find')
+  async findFeed(@Query('url') url: string): Promise<ListRes<string>> {
+    const _feedUrls = await this.findFeedService.findRSSFeed(url);
+    return { items: _feedUrls };
   }
 }

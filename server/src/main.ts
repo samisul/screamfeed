@@ -5,7 +5,6 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
-import { MiscModule } from './misc/misc.module';
 
 async function bootstrap() {
   const globalPrefix = 'api';
@@ -20,9 +19,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('pos')
     .build();
-  const document = SwaggerModule.createDocument(app, config, {
-    include: [MiscModule],
-  });
+  const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('open', app, document);
 
   const configService = app.get(ConfigService);
