@@ -42,7 +42,7 @@
               modalStore.trigger(getModalData(item));
             }}
           >
-            {truncateString(item.title, 50)}
+            {truncateString(item.title ?? '', 50)}
           </button>
         </li>
       {/each}

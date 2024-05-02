@@ -140,6 +140,7 @@ export class FeedService {
           f!.feed as FeedRes,
           f?.url ?? '',
         );
+
         _parsedFeedsToCache.push({ url: f!.url, parsedFeed: _genericFeed });
         return _genericFeed;
       });

@@ -49,7 +49,7 @@ export class FeedMappers {
           link: feed.rss.channel.link,
           description: feed.rss.channel.description,
           language: feed.rss.channel.language,
-          item: [feed.rss.channel.item].flatMap(FeedMappers.toRSSFeedItem),
+          item: [feed.rss.channel.item].flat().map(FeedMappers.toRSSFeedItem),
         },
       },
     };
