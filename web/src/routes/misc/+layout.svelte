@@ -15,12 +15,7 @@
   border=""
   class=" w-full"
 >
-  <TabAnchor href="/misc/quick-feed" selected={$page.url.pathname === '/misc/quick-feed'}>
-    <svelte:fragment slot="lead">
-      <NewspaperOutline></NewspaperOutline>
-    </svelte:fragment>
-  </TabAnchor>
-  <TabAnchor href="/misc/find-feed" selected={$page.url.pathname === '/misc/find-feed'}>
+  <TabAnchor href="/feed/find-feed" selected={$page.url.pathname === '/misc/find-feed'}>
     <svelte:fragment slot="lead">
       <LinkOutline></LinkOutline>
     </svelte:fragment>

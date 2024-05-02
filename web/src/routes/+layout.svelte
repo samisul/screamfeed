@@ -39,9 +39,6 @@
         case '4':
           goto('/feed/marks');
           break;
-        case '5':
-          goto('/misc/quick-feed');
-          break;
       }
     });
 
@@ -80,7 +77,11 @@
       </svelte:fragment>
     </TabAnchor>
   {/if}
-  <TabAnchor href="/misc/quick-feed" selected={$page.url.pathname.includes('/misc/quick-feed')}>
+  <TabAnchor
+    href="/feed/find"
+    selected={$page.url.pathname.includes('/feed/find') ||
+      $page.url.pathname.includes('/feed/inout')}
+  >
     <svelte:fragment slot="lead">
       <CogSolid></CogSolid>
     </svelte:fragment>
