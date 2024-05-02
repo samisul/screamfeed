@@ -5,8 +5,8 @@
     ProfileCardSolid,
     PenNibSolid,
     NewspaperSolid,
-    FileImportSolid,
-    MapPinSolid
+    MapPinSolid,
+    CogSolid
   } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
   import { isLoading } from '../stores/global.store';
@@ -81,7 +81,7 @@
     </TabAnchor>
     <TabAnchor href="/misc/inout" selected={$page.url.pathname.includes('/misc/inout')}>
       <svelte:fragment slot="lead">
-        <FileImportSolid></FileImportSolid>
+        <CogSolid></CogSolid>
       </svelte:fragment>
     </TabAnchor>
   {/if}
