@@ -2,12 +2,12 @@
   import { addFeed, getFeedUrls } from '$lib/feed';
   import { invalidUrl } from '$lib/helpers';
   import { TabGroup, Tab } from '@skeletonlabs/skeleton';
-  import { isLoading } from '../../../stores/global.store';
   import { onMount } from 'svelte';
-  import { isLoggedIn } from '../../../stores/user.store';
   import { goto } from '$app/navigation';
-  import Export from './components/Export.svelte';
-  import Import from './components/Import.svelte';
+  import Export from '../components/Export.svelte';
+  import Import from '../components/Import.svelte';
+  import { isLoggedIn } from '../../../stores/user.store';
+  import { isLoading } from '../../../stores/global.store';
 
   let tabSet: number = 0;
   let files: FileList;

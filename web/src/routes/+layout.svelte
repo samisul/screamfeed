@@ -40,7 +40,7 @@
           goto('/feed/marks');
           break;
         case '5':
-          goto('/feed/inout');
+          goto('/misc/inout');
           break;
       }
     });
@@ -79,7 +79,7 @@
         <MapPinSolid></MapPinSolid>
       </svelte:fragment>
     </TabAnchor>
-    <TabAnchor href="/feed/inout" selected={$page.url.pathname.includes('/feed/inout')}>
+    <TabAnchor href="/misc/inout" selected={$page.url.pathname.includes('/misc/inout')}>
       <svelte:fragment slot="lead">
         <FileImportSolid></FileImportSolid>
       </svelte:fragment>
