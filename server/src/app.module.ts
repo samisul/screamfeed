@@ -6,11 +6,13 @@ import { env } from 'process';
 import { UserModule } from './user/user.module';
 import { FeedModule } from './feed/feed.module';
 import { MarkModule } from './mark/mark.module';
+import { MiscModule } from './misc/misc.module';
 
 @Module({
   imports: [
     UserModule,
     FeedModule,
+    MiscModule,
     MarkModule,
     DataModule.forRoot(),
     ConfigModule.forRoot({
@@ -18,6 +20,7 @@ import { MarkModule } from './mark/mark.module';
       isGlobal: true,
     }),
     MarkModule,
+    MiscModule,
   ],
   controllers: [],
   providers: [SeedService, Logger],

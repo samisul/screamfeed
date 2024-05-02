@@ -20,7 +20,7 @@
       <NewspaperOutline></NewspaperOutline>
     </svelte:fragment>
   </TabAnchor>
-  <TabAnchor href="/misc/get-feed-link" selected={$page.url.pathname === '/misc/get-feed-link'}>
+  <TabAnchor href="/misc/find-feed" selected={$page.url.pathname === '/misc/find-feed'}>
     <svelte:fragment slot="lead">
       <LinkOutline></LinkOutline>
     </svelte:fragment>
