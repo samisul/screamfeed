@@ -30,9 +30,14 @@ export class Helpers {
   }
 
   static async findRSSFeed(url: string): Promise<string[]> {
+    const _rssLink: string[] = [];
+
+    _rssLink.push(...Helpers.tryConstructFeed(url));
+
+    if (_rssLink.length) return _rssLink;
+
     const response = await axios.get(url);
     const doc = parse(response.data);
-    const _rssLink: string[] = [];
 
     Helpers.types.forEach((type) => {
       const rssLinks = doc.querySelectorAll(`link[type="${type}"]`);
@@ -42,6 +47,38 @@ export class Helpers {
       });
     });
 
+    if (!_rssLink.length) _rssLink.push(...Helpers.tryConstructFeed(url));
+
     return _rssLink;
+  }
+
+  private static tryConstructFeed(url: string): string[] {
+    const _reddit = Helpers.tryGetRedditFeed(url);
+    const _medium = Helpers.tryGetMediumFeed(url);
+
+    if (_reddit) return _reddit;
+    if (_medium) return _medium;
+
+    return [];
+  }
+
+  private static tryGetRedditFeed(url: string): string[] {
+    const _isReddit = url.match(/reddit\.com\/r\/\w+/);
+    if (!_isReddit) return [];
+
+    const _sub = _isReddit ? _isReddit[0].split('/')[2] : null;
+    if (_sub) return [`https://www.reddit.com/r/${_sub}/.rss`];
+
+    return [];
+  }
+
+  private static tryGetMediumFeed(url: string): string[] {
+    const _isMedium = url.match(/medium\.com\/\w+/);
+    if (!_isMedium) return [];
+
+    const _user = _isMedium ? _isMedium[0].split('/')[2] : null;
+    if (_user) return [`https://medium.com/feed/${_user}`];
+
+    return [];
   }
 }
