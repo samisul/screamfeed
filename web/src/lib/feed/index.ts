@@ -27,3 +27,7 @@ export async function removeFeed(id: string): Promise<boolean> {
 export async function list(): Promise<ListRes<FeedDto> | undefined> {
   return await get<ListRes<FeedDto>>(`${FEED_URL}/list`);
 }
+
+export async function find(url: string): Promise<ListRes<string> | undefined> {
+  return await get<ListRes<string>>(`${FEED_URL}/find?url=${url}`);
+}
