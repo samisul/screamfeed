@@ -30,6 +30,8 @@ export class FindFeedService {
     if (_rssLink.length) return _rssLink;
 
     const response = await firstValueFrom(this.httpService.get(url));
+    if (response.status !== 200) return [];
+
     const doc = parse(response.data);
 
     this.types.forEach((type) => {
