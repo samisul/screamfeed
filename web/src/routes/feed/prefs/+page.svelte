@@ -43,6 +43,10 @@
       <input class="checkbox" type="checkbox" bind:checked={form.search} />
       <p>Search Bar</p>
     </label>
+    <label class="flex items-center space-x-2">
+      <input class="checkbox" type="checkbox" bind:checked={form.recommendations} />
+      <p>Recommendations</p>
+    </label>
     <div>
       <button class="variant-outline btn" on:click={onReset}>Reset</button>
       <button class="variant-filled-primary btn" on:click={onSave}>Save</button>

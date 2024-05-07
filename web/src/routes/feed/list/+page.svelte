@@ -9,6 +9,7 @@
   import { Accordion, AccordionItem, getToastStore } from '@skeletonlabs/skeleton';
   import { invalidUrl } from '$lib/helpers';
   import type { PageModel } from './page.model';
+  import { prefs } from '../../../stores/prefs.store';
 
   export let data: PageModel | undefined = undefined;
 
@@ -119,26 +120,28 @@
       {/each}
     </ul>
   {/if}
-  <Accordion>
-    {#await list() then list}
-      <AccordionItem class="w-full">
-        <svelte:fragment slot="summary">Recommendations</svelte:fragment>
-        <svelte:fragment slot="content">
-          <ul class="w-full text-sm">
-            {#each list?.items ?? [] as item}
-              <FeedUrl
-                isAddable
-                on:add={(url) => {
-                  form.url = url.detail.url;
-                  form.title = url.detail.title;
-                }}
-                {item}
-                on:remove={(id) => remove(id.detail)}
-              />
-            {/each}
-          </ul>
-        </svelte:fragment>
-      </AccordionItem>
-    {/await}
-  </Accordion>
+  {#if $prefs?.recommendations}
+    <Accordion>
+      {#await list() then list}
+        <AccordionItem class="w-full">
+          <svelte:fragment slot="summary">Recommendations</svelte:fragment>
+          <svelte:fragment slot="content">
+            <ul class="w-full text-sm">
+              {#each list?.items ?? [] as item}
+                <FeedUrl
+                  isAddable
+                  on:add={(url) => {
+                    form.url = url.detail.url;
+                    form.title = url.detail.title;
+                  }}
+                  {item}
+                  on:remove={(id) => remove(id.detail)}
+                />
+              {/each}
+            </ul>
+          </svelte:fragment>
+        </AccordionItem>
+      {/await}
+    </Accordion>
+  {/if}
 </div>
