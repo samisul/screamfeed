@@ -1,4 +1,5 @@
 import type { Prefs } from './model';
+import { prefs as prefsStore } from '../../stores/prefs.store';
 
 const PREFIX = 'SCREAMFEED';
 
@@ -15,4 +16,5 @@ export function load(): Prefs {
 
 export function save(prefs: Prefs): void {
   localStorage.setItem(`${PREFIX}_PREFS`, JSON.stringify(prefs));
+  prefsStore.set(prefs);
 }

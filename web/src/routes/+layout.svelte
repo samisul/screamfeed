@@ -16,6 +16,7 @@
   import { isLoggedIn } from '../stores/user.store';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { prefs } from '../stores/prefs.store';
 
   initModalStore();
   initToastStore();
@@ -37,7 +38,9 @@
           goto('/feed/overview');
           break;
         case '4':
-          goto('/feed/marks');
+          {
+            if ($prefs?.marks) goto('/feed/marks');
+          }
           break;
         case '5':
           goto('/feed/find');
@@ -74,15 +77,18 @@
         <NewspaperSolid></NewspaperSolid>
       </svelte:fragment>
     </TabAnchor>
-    <TabAnchor href="/feed/marks" selected={$page.url.pathname.includes('/feed/marks')}>
-      <svelte:fragment slot="lead">
-        <MapPinSolid></MapPinSolid>
-      </svelte:fragment>
-    </TabAnchor>
+    {#if $prefs?.marks}
+      <TabAnchor href="/feed/marks" selected={$page.url.pathname.includes('/feed/marks')}>
+        <svelte:fragment slot="lead">
+          <MapPinSolid></MapPinSolid>
+        </svelte:fragment>
+      </TabAnchor>
+    {/if}
     <TabAnchor
       href="/feed/find"
       selected={$page.url.pathname.includes('/feed/find') ||
-        $page.url.pathname.includes('/feed/inout')}
+        $page.url.pathname.includes('/feed/inout') ||
+        $page.url.pathname.includes('/feed/prefs')}
     >
       <svelte:fragment slot="lead">
         <CogSolid></CogSolid>

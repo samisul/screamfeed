@@ -4,6 +4,7 @@
   import { truncateString } from '$lib/helpers';
   import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import { createEventDispatcher } from 'svelte';
+  import { prefs } from '../../../stores/prefs.store';
 
   export let feed: GenericFeed;
 
@@ -29,9 +30,11 @@
     <ul>
       {#each feed?.items ?? [] as item}
         <li class="flex">
-          <button type="button" class="btn bg-initial" on:click={() => dispatch('mark', item)}>
-            <MapPinSolid class="text-gray-500"></MapPinSolid>
-          </button>
+          {#if $prefs?.marks}
+            <button type="button" class="btn bg-initial" on:click={() => dispatch('mark', item)}>
+              <MapPinSolid class="text-gray-500"></MapPinSolid>
+            </button>
+          {/if}
           <a href={item.link} target="_blank" class={item.link ? '' : 'pointer-events-none'}>
             <GlobeSolid class="text-gray-500"></GlobeSolid>
           </a>

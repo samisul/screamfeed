@@ -10,6 +10,7 @@
   import { addMark } from '$lib/mark';
   import type { PageModel } from './page.model';
   import { SearchSolid } from 'flowbite-svelte-icons';
+  import { prefs } from '../../../stores/prefs.store';
 
   let load = false;
   let search = '';
@@ -94,11 +95,13 @@
 
 <div class="lg:p-4 p-2 flex flex-col gap-4">
   <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-    <div class="input-group-shim">
-      <SearchSolid></SearchSolid>
-    </div>
-    <input type="search" placeholder="Search..." bind:value={search} bind:this={searchEl} />
-    <button class="variant-filled-primary" on:click={onSearchSubmit}>Submit</button>
+    {#if $prefs?.search}
+      <div class="input-group-shim">
+        <SearchSolid></SearchSolid>
+      </div>
+      <input type="search" placeholder="Search..." bind:value={search} bind:this={searchEl} />
+      <button class="variant-filled-primary" on:click={onSearchSubmit}>Submit</button>
+    {/if}
   </div>
   <Accordion>
     {#each items as feed}
