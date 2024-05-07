@@ -39,6 +39,9 @@
         case '4':
           goto('/feed/marks');
           break;
+        case '5':
+          goto('/feed/find');
+          break;
       }
     });
 

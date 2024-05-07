@@ -69,7 +69,7 @@
     $isLoading = false;
   }
 
-  async function mark(item: GenericFeedItem) {
+  async function mark(item: GenericFeedItem): Promise<void> {
     $isLoading = true;
     const _res = await addMark({
       item
