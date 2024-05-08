@@ -3,7 +3,7 @@
   import type { GenericFeed, GenericFeedItem } from '$lib/feed/model';
   import { isLoading } from '../../../stores/global.store';
   import { Accordion, getToastStore } from '@skeletonlabs/skeleton';
-  import FeedOverview from '../components/FeedOverview.svelte';
+  import FeedOverview from './components/FeedOverview.svelte';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { isLoggedIn } from '../../../stores/user.store';

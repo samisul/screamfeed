@@ -11,7 +11,7 @@
   import { page } from '$app/stores';
   import { isLoading } from '../stores/global.store';
   import { initializeStores as initModalStore, Modal } from '@skeletonlabs/skeleton';
-  import FeedItemContent from './feed/components/FeedItemContent.svelte';
+  import FeedItemContent from './feed/overview/components/FeedItemContent.svelte';
   import { initializeStores as initToastStore, Toast } from '@skeletonlabs/skeleton';
   import { isLoggedIn } from '../stores/user.store';
   import { onMount } from 'svelte';

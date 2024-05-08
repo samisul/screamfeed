@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { GenericFeed } from '$lib/feed/model';
   import { AccordionItem } from '@skeletonlabs/skeleton';
-  import FeedOverviewContent from '../components/FeedOverviewContent.svelte';
+  import FeedOverviewContent from './FeedOverviewContent.svelte';
   import { RefreshOutline } from 'flowbite-svelte-icons';
   import { getParsedFeeds } from '$lib/feed';
 
