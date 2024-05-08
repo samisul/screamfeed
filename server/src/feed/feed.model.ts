@@ -69,3 +69,9 @@ export interface GenericFeedItem {
   content: string;
   date: string;
 }
+
+export interface FeedDto {
+  id: string;
+  url: string;
+  title: string;
+}

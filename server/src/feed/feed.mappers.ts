@@ -1,4 +1,4 @@
-import { Feed } from 'src/core/entities/feed/feed.entity';
+import { Feed } from './feed.entity';
 import type {
   RSSFeed,
   RSSFeedItem,
@@ -7,8 +7,8 @@ import type {
   GenericFeedItem,
   FeedRes,
   GenericFeed,
+  FeedDto,
 } from './feed.model';
-import { FeedDto } from 'src/core/dtos/feed.dto';
 import { Helpers } from 'src/core/helpers';
 
 export class FeedMappers {

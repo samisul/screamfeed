@@ -1,5 +1,6 @@
+import { Tag } from 'src/tag/tag.entity';
+import { User } from 'src/user/user.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../user.entity';
 
 @Entity()
 export class Feed {
@@ -14,6 +15,9 @@ export class Feed {
 
   @ManyToMany(() => User, (user) => user.feeds, { onDelete: 'CASCADE' })
   users: User[];
+
+  @ManyToMany(() => Tag, (tag) => tag.feeds)
+  tags: Tag[];
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

@@ -9,9 +9,9 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
-import { JwtPayload, LoginResDto } from '../core/auth.model';
-import { User } from 'src/core/entities/user.entity';
+import { User } from 'src/user/user.entity';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
+import { JwtPayload, LoginResDto } from './user.model';
 
 @Controller('user')
 export class UserController {

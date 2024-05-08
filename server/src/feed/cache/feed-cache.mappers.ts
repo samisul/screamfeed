@@ -1,4 +1,4 @@
-import { FeedCache } from 'src/core/entities/feed/feed-cache.entity';
+import { FeedCache } from '../feed-cache.entity';
 import { GenericFeed } from '../feed.model';
 
 export class FeedCacheMappers {

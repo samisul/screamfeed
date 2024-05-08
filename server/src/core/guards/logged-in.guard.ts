@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginResDto } from '../auth.model';
+import { LoginResDto } from 'src/user/user.model';
 
 @Injectable()
 export class LoggedInGuard implements CanActivate {

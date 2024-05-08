@@ -6,6 +6,7 @@ import { SeedService } from './data/seed/seed.service';
 import { FeedModule } from './feed/feed.module';
 import { MarkModule } from './mark/mark.module';
 import { UserModule } from './user/user.module';
+import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
       isGlobal: true,
     }),
     MarkModule,
+    TagModule,
   ],
   controllers: [],
   providers: [SeedService, Logger],

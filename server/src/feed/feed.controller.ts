@@ -11,13 +11,12 @@ import {
 } from '@nestjs/common';
 import { FeedService } from './feed.service';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
-import { JwtPayload } from 'src/core/auth.model';
-import { AddFeedReq, GenericFeed } from './feed.model';
-import { Feed } from 'src/core/entities/feed/feed.entity';
-import { FeedDto } from 'src/core/dtos/feed.dto';
-import { ListRes } from 'src/core/dtos/global.dto';
+import { AddFeedReq, FeedDto, GenericFeed } from './feed.model';
+import { ListRes } from 'src/core/core.model';
 import { BooleanTransformer } from 'src/core/transformers/boolean.transformer';
 import { FindFeedService } from './find-feed.service';
+import { Feed } from './feed.entity';
+import { JwtPayload } from 'src/user/user.model';
 
 @Controller('feeds')
 export class FeedController {

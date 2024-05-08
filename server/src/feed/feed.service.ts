@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import { Feed } from 'src/core/entities/feed/feed.entity';
-import { User } from 'src/core/entities/user.entity';
+import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import {
   GenericFeed,
@@ -10,14 +9,15 @@ import {
   RSSFeed,
   AtomFeed,
   AddFeedReq,
+  FeedDto,
 } from './feed.model';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { FeedMappers } from './feed.mappers';
-import { FeedDto } from 'src/core/dtos/feed.dto';
 import { FeedCacheService } from './cache/feed-cache.service';
 import { FeedCacheMappers } from './cache/feed-cache.mappers';
-import { FeedCache } from 'src/core/entities/feed/feed-cache.entity';
+import { Feed } from './feed.entity';
+import { FeedCache } from './feed-cache.entity';
 
 @Injectable()
 export class FeedService {
