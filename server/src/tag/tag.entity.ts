@@ -5,10 +5,12 @@ import {
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Feed } from '../feed/feed.entity';
 
+@Unique(['name'])
 @Entity()
 export class Tag {
   @PrimaryGeneratedColumn('uuid')
