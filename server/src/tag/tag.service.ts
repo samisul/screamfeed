@@ -45,7 +45,10 @@ export class TagService {
       return await this.tagRepo.save(tag);
     }
 
-    const _feeds = await this.feedRepo.findByIds(req.feedIds);
+    const _feeds = await this.feedRepo
+      .createQueryBuilder('feed')
+      .where('feed.id IN (:...ids)', { ids: req.feedIds })
+      .getMany();
 
     if (!_feeds.length) return this.tagRepo.save(tag);
 
