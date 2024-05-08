@@ -3,9 +3,11 @@ import { TagController } from './tag.controller';
 import { TagService } from './tag.service';
 import { DataModule } from 'src/data/data.module';
 import { Tag } from 'src/tag/tag.entity';
+import { User } from 'src/user/user.entity';
+import { Feed } from 'src/feed/feed.entity';
 
 @Module({
-  imports: [DataModule.forFeature([Tag])],
+  imports: [DataModule.forFeature([Tag, User, Feed])],
   controllers: [TagController],
   providers: [TagService],
 })
