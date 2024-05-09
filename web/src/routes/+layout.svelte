@@ -6,7 +6,8 @@
     PenNibSolid,
     NewspaperSolid,
     MapPinSolid,
-    CogSolid
+    CogSolid,
+    TagSolid
   } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
   import { isLoading } from '../stores/global.store';
@@ -43,6 +44,9 @@
           }
           break;
         case '5':
+          goto('/tag');
+          break;
+        case '6':
           goto('/feed/find');
           break;
       }
@@ -84,6 +88,11 @@
         </svelte:fragment>
       </TabAnchor>
     {/if}
+    <TabAnchor href="/tag" selected={$page.url.pathname.includes('/tag')}>
+      <svelte:fragment slot="lead">
+        <TagSolid></TagSolid>
+      </svelte:fragment>
+    </TabAnchor>
     <TabAnchor
       href="/feed/find"
       selected={$page.url.pathname.includes('/feed/find') ||

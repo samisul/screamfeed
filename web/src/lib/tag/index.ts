@@ -13,14 +13,14 @@ export async function findTag(id: string): Promise<TagDto | undefined> {
   return await get<TagDto>(`${TAG_URL}/${id}`);
 }
 
-export async function addFeed(req: UpsertTagReq): Promise<TagDto | undefined> {
+export async function addTag(req: UpsertTagReq): Promise<TagDto | undefined> {
   return await post<TagDto>(`${TAG_URL}`, req);
 }
 
-export async function removeFeed(id: string): Promise<boolean> {
+export async function removeTag(id: string): Promise<boolean> {
   return await del(`${TAG_URL}/${id}`);
 }
 
-export async function updateFeed(req: UpsertTagReq, id: string): Promise<boolean> {
+export async function updateTag(req: UpsertTagReq, id: string): Promise<boolean> {
   return await put<UpsertTagReq>(`${TAG_URL}/${id}`, req);
 }
