@@ -6,6 +6,7 @@ import { Tag } from './tag.entity';
 import { TagDto, TagPreviewDto, UpsertTagReq } from './tag.model';
 import { Feed } from 'src/feed/feed.entity';
 import { TagMapper } from './tag.mappers';
+import { FeedUser } from 'src/feed/feed-user.entity';
 
 @Injectable()
 export class TagService {
@@ -13,6 +14,8 @@ export class TagService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Tag) private readonly tagRepo: Repository<Tag>,
     @InjectRepository(Feed) private readonly feedRepo: Repository<Feed>,
+    @InjectRepository(FeedUser)
+    private readonly feedUserRepo: Repository<FeedUser>,
   ) {}
 
   async add(userId: string, req: UpsertTagReq) {
@@ -46,7 +49,7 @@ export class TagService {
       return await this.tagRepo.save(tag);
     }
 
-    const _feeds = await this.feedRepo
+    const _feeds = await this.feedUserRepo
       .createQueryBuilder('feed')
       .where('feed.id IN (:...ids)', { ids: req.feedIds })
       .getMany();
