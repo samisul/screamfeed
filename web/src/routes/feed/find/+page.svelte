@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { find } from '$lib/feed';
+  import { findFeed } from '$lib/feed';
   import { invalidUrl } from '$lib/helpers';
   import { getToastStore } from '@skeletonlabs/skeleton';
   import { FileCopySolid, LinkOutline } from 'flowbite-svelte-icons';
@@ -20,7 +20,7 @@
       return;
     }
     $isLoading = true;
-    foundFeeds = (await find(val))?.items ?? [];
+    foundFeeds = (await findFeed(val))?.items ?? [];
     $isLoading = false;
   }
 

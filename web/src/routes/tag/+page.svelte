@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { addFeed, getFeedUrls, getFeedsList, removeFeed } from '$lib/feed/index';
+  import { addFeed, getFeedUrls, list, removeFeed } from '$lib/feed/index';
   import { CheckCircleSolid } from 'flowbite-svelte-icons';
-  import { isLoading } from '../../../stores/global.store';
-  import FeedUrl from './components/FeedUrl.svelte';
   import { onMount } from 'svelte';
-  import { isLoggedIn } from '../../../stores/user.store';
   import { goto } from '$app/navigation';
   import { Accordion, AccordionItem, getToastStore } from '@skeletonlabs/skeleton';
   import { invalidUrl } from '$lib/helpers';
-  import type { PageModel } from './page.model';
-  import { prefs } from '../../../stores/prefs.store';
 
   export let data: PageModel | undefined = undefined;
 
@@ -122,7 +117,7 @@
   {/if}
   {#if $prefs?.recommendations}
     <Accordion>
-      {#await getFeedsList() then list}
+      {#await list() then list}
         <AccordionItem class="w-full">
           <svelte:fragment slot="summary">Recommendations</svelte:fragment>
           <svelte:fragment slot="content">

@@ -16,7 +16,7 @@ import { ListRes } from 'src/core/core.model';
 import { TagPreviewDto, UpsertTagReq } from './tag.model';
 
 @UseGuards(LoggedInGuard)
-@Controller('tag')
+@Controller('tags')
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
