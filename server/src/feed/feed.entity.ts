@@ -1,6 +1,12 @@
 import { Tag } from 'src/tag/tag.entity';
-import { User } from 'src/user/user.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { FeedUser } from './feed-user.entity';
 
 @Entity()
 export class Feed {
@@ -13,8 +19,8 @@ export class Feed {
   @Column({ type: 'varchar', length: 60 })
   title: string;
 
-  @ManyToMany(() => User, (user) => user.feeds, { onDelete: 'CASCADE' })
-  users: User[];
+  @OneToMany(() => FeedUser, (fu) => fu.users)
+  users: FeedUser[];
 
   @ManyToMany(() => Tag, (tag) => tag.feeds)
   tags: Tag[];

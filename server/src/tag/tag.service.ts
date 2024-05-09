@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { Tag } from './tag.entity';
-import { UpsertTagReq } from './tag.model';
+import { TagDto, TagPreviewDto, UpsertTagReq } from './tag.model';
 import { Feed } from 'src/feed/feed.entity';
+import { TagMapper } from './tag.mappers';
 
 @Injectable()
 export class TagService {
@@ -61,11 +62,20 @@ export class TagService {
     await this.tagRepo.delete({ id, user: { id: userId } });
   }
 
-  async get(userId: string): Promise<Tag[]> {
-    return await this.tagRepo.find({ where: { user: { id: userId } } });
+  async get(userId: string): Promise<TagPreviewDto[]> {
+    return (
+      await this.tagRepo.find({
+        where: { user: { id: userId } },
+      })
+    ).map((t) => TagMapper.toTagPreviewDto(t));
   }
 
-  async getOne(userId: string, id: string): Promise<Tag | null> {
-    return await this.tagRepo.findOne({ where: { id, user: { id: userId } } });
+  async getOne(userId: string, id: string): Promise<TagDto | null> {
+    const _tag = await this.tagRepo.findOne({
+      where: { id, user: { id: userId } },
+      relations: ['feeds'],
+    });
+    if (!_tag) return null;
+    return TagMapper.toTagDto(_tag);
   }
 }

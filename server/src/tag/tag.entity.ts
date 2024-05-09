@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Feed } from '../feed/feed.entity';
+import { FeedUser } from 'src/feed/feed-user.entity';
 
 @Unique(['name'])
 @Entity()
@@ -23,7 +24,7 @@ export class Tag {
   user: User;
 
   @JoinTable()
-  @ManyToMany(() => Feed, (feed) => feed.tags)
+  @ManyToMany(() => FeedUser, (feed) => feed.tags)
   feeds: Feed[];
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })

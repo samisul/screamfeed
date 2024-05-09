@@ -8,9 +8,13 @@ import { FeedCacheService } from './cache/feed-cache.service';
 import { FindFeedService } from './find-feed.service';
 import { Feed } from './feed.entity';
 import { FeedCache } from './feed-cache.entity';
+import { FeedUser } from './feed-user.entity';
 
 @Module({
-  imports: [HttpModule, DataModule.forFeature([Feed, User, FeedCache])],
+  imports: [
+    HttpModule,
+    DataModule.forFeature([Feed, User, FeedCache, FeedUser]),
+  ],
   controllers: [FeedController],
   providers: [FeedService, FeedCacheService, FindFeedService],
   exports: [],

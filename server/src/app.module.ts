@@ -1,12 +1,12 @@
 import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { env } from 'process';
 import { DataModule } from './data/data.module';
 import { SeedService } from './data/seed/seed.service';
 import { FeedModule } from './feed/feed.module';
 import { MarkModule } from './mark/mark.module';
-import { UserModule } from './user/user.module';
 import { TagModule } from './tag/tag.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -25,10 +25,7 @@ import { TagModule } from './tag/tag.module';
   providers: [SeedService, Logger],
 })
 export class AppModule implements OnApplicationBootstrap {
-  constructor(
-    private readonly seedService: SeedService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly seedService: SeedService) {}
 
   async onApplicationBootstrap(): Promise<void> {
     await this.seedService.seed();
