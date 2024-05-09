@@ -18,12 +18,14 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { prefs } from '../stores/prefs.store';
+  import UpsertTag from './tag/components/UpsertTag.svelte';
 
   initModalStore();
   initToastStore();
 
   const modalRegistry: Record<string, ModalComponent> = {
-    feedItemContent: { ref: FeedItemContent }
+    feedItemContent: { ref: FeedItemContent },
+    upsertTag: { ref: UpsertTag }
   };
 
   onMount(() => {

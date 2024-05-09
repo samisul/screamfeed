@@ -1,20 +1,30 @@
 <script lang="ts">
-  import { CheckCircleSolid } from 'flowbite-svelte-icons';
+  import { TrashBinSolid } from 'flowbite-svelte-icons';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { getModalStore, getToastStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import { removeTag } from '$lib/tag';
   import type { PageModel } from './page.model';
   import { isLoggedIn } from '../../stores/user.store';
   import { isLoading } from '../../stores/global.store';
+  import { truncateString } from '$lib/helpers';
 
   export let data: PageModel | undefined = undefined;
 
+  const modalStore = getModalStore();
   const toastStore = getToastStore();
 
   onMount(() => {
     if (!$isLoggedIn) goto('/');
   });
+
+  function getModalData(id: string): ModalSettings {
+    return {
+      type: 'component',
+      meta: { id },
+      component: 'upsertTag'
+    };
+  }
 
   async function remove(id: string) {
     $isLoading = true;
@@ -42,21 +52,27 @@
   }
 </script>
 
-<div class="lg:p-4 p-2 flex flex-col gap-4 justify-center align-middle items-center">
-  {#if data?.tags}
-    <ul class="w-full">
-      {#each data?.tags.items as item}
-        <li class="flex justify-between">
-          <span>
-            {item.name}
-          </span>
-          <button type="button" class="btn bg-initial" on:click={() => remove(item.id)}>
-            <CheckCircleSolid class="text-gray-500"></CheckCircleSolid>
+<li class="lg:p-4 p-2 flex flex-col gap-4">
+  <nav class="list-nav w-full overflow-y-scroll max-h-[75vh]">
+    <ul>
+      {#each data?.tags?.items ?? [] as tag}
+        <li class="flex">
+          <button type="button" class="btn bg-initial" on:click={() => remove(tag.id)}>
+            <TrashBinSolid class="text-gray-500"></TrashBinSolid>
+          </button>
+          <button
+            type="button"
+            class="btn bg-initial"
+            on:click={() => {
+              modalStore.trigger(getModalData(tag?.id));
+            }}
+          >
+            {truncateString(tag?.name, 50)}
           </button>
         </li>
       {:else}
-        <div class="text-center">No Tags Found.</div>
+        <div class="text-center p-4">No Tags Found.</div>
       {/each}
     </ul>
-  {/if}
-</div>
+  </nav>
+</li>
