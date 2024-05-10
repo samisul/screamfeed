@@ -78,7 +78,11 @@
 </script>
 
 <li class="lg:p-4 p-2 flex flex-col gap-4">
-  <button type="button" class="btn variant-filled-primary" on:click={handleUpsertTag}>
+  <button
+    type="button"
+    class="btn variant-filled-primary"
+    on:click={async () => await handleUpsertTag()}
+  >
     <PlusOutline />
   </button>
   <nav class="list-nav w-full overflow-y-scroll max-h-[75vh]">

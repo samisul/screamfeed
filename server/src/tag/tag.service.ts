@@ -87,8 +87,6 @@ export class TagService {
       .leftJoinAndSelect('feed.feed', 'f')
       .getOne();
 
-    console.log(_tag);
-
     if (!_tag) return null;
 
     return TagMapper.toTagDto(_tag);
