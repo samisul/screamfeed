@@ -106,7 +106,12 @@
       placeholder="Enter Feed Title"
       bind:value={form.title}
     />
-    <button on:click={add} type="button" class="btn variant-filled-surface">
+    <button
+      on:click={add}
+      type="button"
+      class="btn variant-filled-surface"
+      disabled={!form.title || !form.url}
+    >
       <CheckCircleSolid />
     </button>
   </div>
