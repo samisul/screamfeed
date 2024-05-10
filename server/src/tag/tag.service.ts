@@ -17,11 +17,13 @@ export class TagService {
   ) {}
 
   async add(userId: string, req: UpsertTagReq) {
-    const _feeds = await this.feedUserRepo
-      .createQueryBuilder('feedUser')
-      .where('feedUser.feedId IN (:...ids)', { ids: req.feedIds })
-      .andWhere('feedUser.userId = :userId', { userId })
-      .getMany();
+    const _feeds = req.feedIds.length
+      ? await this.feedUserRepo
+          .createQueryBuilder('feedUser')
+          .where('feedUser.feedId IN (:...ids)', { ids: req.feedIds })
+          .andWhere('feedUser.userId = :userId', { userId })
+          .getMany()
+      : [];
 
     const newTag = this.tagRepo.create({
       name: req.name,
