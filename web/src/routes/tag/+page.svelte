@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TrashBinSolid } from 'flowbite-svelte-icons';
+  import { TrashBinSolid, PlusOutline } from 'flowbite-svelte-icons';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { getModalStore, getToastStore, type ModalSettings } from '@skeletonlabs/skeleton';
@@ -8,6 +8,7 @@
   import { isLoggedIn } from '../../stores/user.store';
   import { isLoading } from '../../stores/global.store';
   import { truncateString } from '$lib/helpers';
+  import type { TagPreviewDto } from '$lib/tag/model';
 
   export let data: PageModel | undefined = undefined;
 
@@ -18,12 +19,36 @@
     if (!$isLoggedIn) goto('/');
   });
 
-  function getModalData(id: string): ModalSettings {
+  function getModalData(id?: string): ModalSettings {
     return {
       type: 'component',
-      meta: { id },
+      meta: { id, feedList: data?.feeds?.items ?? [] },
       component: 'upsertTag'
     };
+  }
+
+  async function handleUpsertTag(id?: string) {
+    const _res = await new Promise<TagPreviewDto>((resolve) => {
+      const _modalSettings = getModalData(id);
+      const _modal: ModalSettings = {
+        ..._modalSettings,
+        response: (r: TagPreviewDto) => resolve(r)
+      };
+      modalStore.trigger(_modal);
+    });
+
+    if (!_res) return;
+
+    toastStore.trigger({
+      message: 'Tag Added',
+      background: 'variant-filled-primary',
+      hoverable: true
+    });
+
+    data = {
+      ...data,
+      tags: { items: [...(data?.tags?.items ?? []), _res] }
+    } as PageModel;
   }
 
   async function remove(id: string) {
@@ -48,11 +73,14 @@
     data = {
       ...data,
       tags: { items: data?.tags?.items.filter((tag) => tag.id !== id) ?? [] }
-    };
+    } as PageModel;
   }
 </script>
 
 <li class="lg:p-4 p-2 flex flex-col gap-4">
+  <button type="button" class="btn variant-filled-primary" on:click={handleUpsertTag}>
+    <PlusOutline />
+  </button>
   <nav class="list-nav w-full overflow-y-scroll max-h-[75vh]">
     <ul>
       {#each data?.tags?.items ?? [] as tag}
@@ -63,9 +91,7 @@
           <button
             type="button"
             class="btn bg-initial"
-            on:click={() => {
-              modalStore.trigger(getModalData(tag?.id));
-            }}
+            on:click={async () => await handleUpsertTag(tag.id)}
           >
             {truncateString(tag?.name, 50)}
           </button>

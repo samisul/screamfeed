@@ -13,8 +13,8 @@ export async function findTag(id: string): Promise<TagDto | undefined> {
   return await get<TagDto>(`${TAG_URL}/${id}`);
 }
 
-export async function addTag(req: UpsertTagReq): Promise<TagDto | undefined> {
-  return await post<TagDto>(`${TAG_URL}`, req);
+export async function addTag(req: UpsertTagReq): Promise<TagPreviewDto | undefined> {
+  return await post<TagPreviewDto>(`${TAG_URL}`, req);
 }
 
 export async function removeTag(id: string): Promise<boolean> {
