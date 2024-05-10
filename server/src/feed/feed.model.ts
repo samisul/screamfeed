@@ -1,3 +1,5 @@
+import { TagPreviewDto } from 'src/tag/tag.model';
+
 export interface AddFeedReq {
   url: string;
   title: string;
@@ -74,4 +76,5 @@ export interface FeedDto {
   id: string;
   url: string;
   title: string;
+  tags: TagPreviewDto[];
 }

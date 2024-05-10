@@ -38,7 +38,7 @@
 
   onMount(() => {
     if (!$isLoggedIn) goto('/');
-    items = data?.feeds?.items ?? [];
+    items = data?.parsedFeeds?.items ?? [];
 
     const _listener = (document.onkeydown = (e) => {
       if (e.key === 'Enter') onSearchSubmit();
@@ -49,21 +49,28 @@
     return () => document.removeEventListener('keydown', _listener);
   });
 
-  function toggle(f: string): void {
+  async function toggle(f: string): Promise<void> {
     filters[f] = !filters[f];
-    console.log(filters);
+    if (Object.values(filters).every((f) => !f)) return;
+
+    console.log(data?.feeds);
+    const _urlsToFetch =
+      data?.feeds?.items.filter((f) => f.tags.some((t) => filters[t.name])) ?? [];
+
+    console.log(_urlsToFetch);
+    items = (await getParsedFeeds(_urlsToFetch.map((f) => f.url)))?.items ?? [];
   }
 
   function onSearchSubmit() {
     if (!search || search.trim() === '') {
-      items = data?.feeds?.items ?? [];
+      items = data?.parsedFeeds?.items ?? [];
       return;
     }
 
     //todo: optimize nested loops//
     const _filtered: GenericFeed[] = [];
 
-    data?.feeds?.items.forEach((item) => {
+    data?.parsedFeeds?.items.forEach((item) => {
       if (item.title.toLowerCase().includes(search.toLowerCase())) {
         _filtered.push(item);
         return;
@@ -79,7 +86,7 @@
   async function refresh(): Promise<void> {
     if (!data) return;
     $isLoading = true;
-    data = { ...data, feeds: await getParsedFeeds() };
+    data = { ...data, parsedFeeds: await getParsedFeeds() };
     $isLoading = false;
   }
 

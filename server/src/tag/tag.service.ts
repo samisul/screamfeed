@@ -83,6 +83,17 @@ export class TagService {
     ).map((t) => TagMapper.toTagPreviewDto(t));
   }
 
+  async getWithFeeds(userId: string): Promise<TagDto[]> {
+    return (
+      await this.tagRepo
+        .createQueryBuilder('tag')
+        .where('tag.user = :userId', { userId })
+        .leftJoinAndSelect('tag.feeds', 'feed')
+        .leftJoinAndSelect('feed.feed', 'f')
+        .getMany()
+    ).map((t) => TagMapper.toTagDto(t));
+  }
+
   async getOne(userId: string, id: string): Promise<TagDto | null> {
     const _tag = await this.tagRepo
       .createQueryBuilder('tag')

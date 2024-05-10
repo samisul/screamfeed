@@ -11,7 +11,6 @@
     name: '',
     feedIds: []
   };
-
   const modalStore = getModalStore();
   const toastStore = getToastStore();
 

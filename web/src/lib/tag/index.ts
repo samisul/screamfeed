@@ -9,6 +9,10 @@ export async function getTags(): Promise<ListRes<TagPreviewDto> | undefined> {
   return await get<ListRes<TagPreviewDto>>(`${TAG_URL}`);
 }
 
+export async function getTagsWithFeeds(): Promise<ListRes<TagDto> | undefined> {
+  return await get<ListRes<TagDto>>(`${TAG_URL}/feeds`);
+}
+
 export async function findTag(id: string): Promise<TagDto | undefined> {
   return await get<TagDto>(`${TAG_URL}/${id}`);
 }

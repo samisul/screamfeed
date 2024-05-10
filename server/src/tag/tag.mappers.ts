@@ -14,7 +14,7 @@ export class TagMapper {
     return {
       id: tag.id,
       name: tag.name,
-      feeds: tag.feeds.map((f) => FeedMappers.toFeedDto(f.feed)),
+      feeds: tag.feeds.map((f) => FeedMappers.toFeedDto(f)),
     };
   }
 }

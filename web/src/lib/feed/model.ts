@@ -1,7 +1,10 @@
+import type { TagPreviewDto } from '$lib/tag/model';
+
 export interface FeedDto {
   id: string;
   url: string;
   title: string;
+  tags: TagPreviewDto[];
 }
 
 export interface AddFeedReq {

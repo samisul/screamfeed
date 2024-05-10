@@ -40,12 +40,13 @@ export class FeedService {
       .createQueryBuilder('feedUser')
       .leftJoinAndSelect('feedUser.feed', 'feed')
       .leftJoinAndSelect('feedUser.user', 'user')
+      .leftJoinAndSelect('feedUser.tags', 'tags')
       .where('user.id != :id', { id: userId })
       .getMany();
 
     return _feedsTheUserDoesntHave
       .filter((f) => !_userFeeds.map((uf) => uf.url).includes(f.feed.url))
-      .map((f) => FeedMappers.toFeedDto(f.feed));
+      .map((f) => FeedMappers.toFeedDto(f));
   }
 
   async add(feedDto: AddFeedReq, userId: string): Promise<Feed | undefined> {
@@ -91,11 +92,12 @@ export class FeedService {
       .createQueryBuilder('feedUser')
       .leftJoinAndSelect('feedUser.feed', 'feed')
       .leftJoinAndSelect('feedUser.user', 'user')
+      .leftJoinAndSelect('feedUser.tags', 'tags')
       .where('user.id = :id', { id: userId })
       .orderBy('feed.createdAt', 'DESC')
       .getMany();
 
-    return _feeds.map((f) => FeedMappers.toFeedDto(f.feed));
+    return _feeds.map((f) => FeedMappers.toFeedDto(f));
   }
 
   async getParsedFeedsFromURLs(

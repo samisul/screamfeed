@@ -13,7 +13,7 @@ import { TagService } from './tag.service';
 import { Get } from '@nestjs/common';
 import { JwtPayload } from 'src/user/user.model';
 import { ListRes } from 'src/core/core.model';
-import { TagPreviewDto, UpsertTagReq } from './tag.model';
+import { TagDto, TagPreviewDto, UpsertTagReq } from './tag.model';
 
 @UseGuards(LoggedInGuard)
 @Controller('tags')
@@ -25,6 +25,14 @@ export class TagController {
     @Req() req: Request & { user: JwtPayload },
   ): Promise<ListRes<TagPreviewDto>> {
     const _tags = await this.tagService.get(req.user.sub);
+    return { items: _tags };
+  }
+
+  @Get('feeds')
+  async getWithFeeds(
+    @Req() req: Request & { user: JwtPayload },
+  ): Promise<ListRes<TagDto>> {
+    const _tags = await this.tagService.getWithFeeds(req.user.sub);
     return { items: _tags };
   }
 
