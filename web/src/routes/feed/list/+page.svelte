@@ -35,7 +35,7 @@
 
   async function refresh(): Promise<void> {
     $isLoading = true;
-    data = { ...data, feeds: await getFeedUrls() };
+    data = { ...data, feeds: await getFeedUrls() } as PageModel;
     $isLoading = false;
   }
 

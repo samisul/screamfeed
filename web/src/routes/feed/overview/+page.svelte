@@ -2,22 +2,30 @@
   import { getParsedFeeds } from '$lib/feed';
   import type { GenericFeed, GenericFeedItem } from '$lib/feed/model';
   import { isLoading } from '../../../stores/global.store';
-  import { Accordion, getToastStore } from '@skeletonlabs/skeleton';
+  import { Accordion, AccordionItem, getToastStore } from '@skeletonlabs/skeleton';
   import FeedOverview from './components/FeedOverview.svelte';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { isLoggedIn } from '../../../stores/user.store';
   import { addMark } from '$lib/mark';
   import type { PageModel } from './page.model';
-  import { SearchSolid } from 'flowbite-svelte-icons';
+  import {
+    CheckCircleSolid,
+    FilterSolid,
+    MinusOutline,
+    PlusOutline,
+    SearchSolid
+  } from 'flowbite-svelte-icons';
   import { prefs } from '../../../stores/prefs.store';
+
+  export let data: PageModel | undefined = undefined;
 
   let load = false;
   let search = '';
   let searchEl: HTMLInputElement | undefined = undefined;
-  export let data: PageModel | undefined = undefined;
-
   let items: GenericFeed[] = [];
+  let filters: Record<string, boolean> =
+    data?.tags?.items.reduce((acc, tag) => ({ ...acc, [tag.name]: true }), {}) ?? {};
 
   const toastStore = getToastStore();
 
@@ -40,6 +48,11 @@
 
     return () => document.removeEventListener('keydown', _listener);
   });
+
+  function toggle(f: string): void {
+    filters[f] = !filters[f];
+    console.log(filters);
+  }
 
   function onSearchSubmit() {
     if (!search || search.trim() === '') {
@@ -94,14 +107,50 @@
 </script>
 
 <div class="lg:p-4 p-2 flex flex-col gap-4">
-  <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-    {#if $prefs?.search}
-      <div class="input-group-shim">
-        <SearchSolid></SearchSolid>
-      </div>
-      <input type="search" placeholder="Search..." bind:value={search} bind:this={searchEl} />
-      <button class="variant-filled-primary" on:click={onSearchSubmit}>Submit</button>
-    {/if}
+  <div class="flex">
+    <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+      {#if $prefs?.search}
+        <div class="input-group-shim">
+          <SearchSolid></SearchSolid>
+        </div>
+        <input type="search" placeholder="Search..." bind:value={search} bind:this={searchEl} />
+        <button class="variant-filled-primary" on:click={onSearchSubmit}>Submit</button>
+      {/if}
+    </div>
+  </div>
+  <div class="border-b border-gray-500">
+    <Accordion>
+      <AccordionItem class="w-full">
+        <svelte:fragment slot="lead">
+          <FilterSolid />
+        </svelte:fragment>
+        <svelte:fragment slot="summary">Filter</svelte:fragment>
+        <svelte:fragment slot="content">
+          <div class="flex gap-2">
+            {#each Object.keys(filters) as f}
+              <button
+                class="chip {filters[f] ? 'variant-filled-primary' : 'variant-soft'}"
+                on:click={() => {
+                  toggle(f);
+                }}
+                on:keypress
+              >
+                {#if filters[f]}
+                  <CheckCircleSolid />
+                {/if}
+                <span class="capitalize">{f}</span>
+              </button>
+            {/each}
+          </div>
+        </svelte:fragment>
+        <svelte:fragment slot="iconClosed">
+          <MinusOutline />
+        </svelte:fragment>
+        <svelte:fragment slot="iconOpen">
+          <PlusOutline />
+        </svelte:fragment>
+      </AccordionItem>
+    </Accordion>
   </div>
   <Accordion>
     {#each items as feed}
