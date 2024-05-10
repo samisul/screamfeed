@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TrashBinSolid, PlusOutline } from 'flowbite-svelte-icons';
+  import { TrashBinSolid, PlusOutline, PenSolid } from 'flowbite-svelte-icons';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { getModalStore, getToastStore, type ModalSettings } from '@skeletonlabs/skeleton';
@@ -7,7 +7,6 @@
   import type { PageModel } from './page.model';
   import { isLoggedIn } from '../../stores/user.store';
   import { isLoading } from '../../stores/global.store';
-  import { truncateString } from '$lib/helpers';
   import type { TagPreviewDto } from '$lib/tag/model';
 
   export let data: PageModel | undefined = undefined;
@@ -28,11 +27,11 @@
   }
 
   async function handleUpsertTag(id?: string) {
-    const _res = await new Promise<TagPreviewDto>((resolve) => {
+    const _res = await new Promise<{ tag: TagPreviewDto; type: 'update' | 'add' }>((resolve) => {
       const _modalSettings = getModalData(id);
       const _modal: ModalSettings = {
         ..._modalSettings,
-        response: (r: TagPreviewDto) => resolve(r)
+        response: (r: { tag: TagPreviewDto; type: 'update' | 'add' }) => resolve(r)
       };
       modalStore.trigger(_modal);
     });
@@ -40,15 +39,23 @@
     if (!_res) return;
 
     toastStore.trigger({
-      message: 'Tag Added',
+      message: 'Tag Added/Updated',
       background: 'variant-filled-primary',
       hoverable: true
     });
 
-    data = {
-      ...data,
-      tags: { items: [...(data?.tags?.items ?? []), _res] }
-    } as PageModel;
+    if (_res.type === 'update') {
+      const _tag = data?.tags?.items.find((tag) => tag.id === _res.tag.id);
+      if (!_tag) return;
+      _tag.name = _res.tag.name;
+      data = { ...data } as PageModel;
+      return;
+    } else {
+      data = {
+        ...data,
+        tags: { items: [...(data?.tags?.items ?? []), _res.tag] }
+      } as PageModel;
+    }
   }
 
   async function remove(id: string) {
@@ -86,19 +93,22 @@
     <PlusOutline />
   </button>
   <nav class="list-nav w-full overflow-y-scroll max-h-[75vh]">
-    <ul>
+    <ul class="w-full">
       {#each data?.tags?.items ?? [] as tag}
-        <li class="flex">
-          <button type="button" class="btn bg-initial" on:click={() => remove(tag.id)}>
-            <TrashBinSolid class="text-gray-500"></TrashBinSolid>
-          </button>
-          <button
-            type="button"
-            class="btn bg-initial"
-            on:click={async () => await handleUpsertTag(tag.id)}
-          >
-            {truncateString(tag?.name, 50)}
-          </button>
+        <li class="flex items-center justify-between">
+          <span>{tag.name}</span>
+          <div class="flex">
+            <button on:click={() => remove(tag.id)} type="button" class="btn bg-initial">
+              <TrashBinSolid />
+            </button>
+            <button
+              type="button"
+              class="btn bg-initial"
+              on:click={async () => await handleUpsertTag(tag.id)}
+            >
+              <PenSolid />
+            </button>
+          </div>
         </li>
       {:else}
         <div class="text-center p-4">No Tags Found.</div>

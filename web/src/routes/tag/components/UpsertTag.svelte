@@ -3,7 +3,7 @@
   import { getToastStore, getModalStore } from '@skeletonlabs/skeleton';
   import { CheckOutline, CloseOutline } from 'flowbite-svelte-icons';
   import { type UpsertTagReq } from '$lib/tag/model';
-  import { addTag, findTag } from '$lib/tag';
+  import { addTag, findTag, updateTag } from '$lib/tag';
 
   export let parent: SvelteComponent;
 
@@ -22,14 +22,34 @@
     const _tagId = $modalStore[0]?.meta.id;
     const _tag = _tagId ? await findTag(_tagId) : undefined;
     if (_tag) {
-      console.log(_tag);
       form.name = _tag.name;
       form.feedIds = _tag.feeds.map((f) => f.id);
     }
   });
 
   async function submit(): Promise<void> {
-    const _res = await addTag(form);
+    const _modal = $modalStore[0];
+    const _feedIds = form.feedIds.includes('__NONE__')
+      ? []
+      : form.feedIds.filter((f) => f !== '__NONE__');
+
+    let _res;
+
+    if (_modal.meta.id) {
+      _res = await updateTag(
+        {
+          ...form,
+          feedIds: _feedIds
+        },
+        _modal.meta.id
+      );
+    } else {
+      _res = await addTag({
+        ...form,
+        feedIds: _feedIds
+      });
+    }
+
     if (!_res) {
       toastStore.trigger({
         message: 'Error: Could not Add Tag',
@@ -39,9 +59,11 @@
       return;
     }
 
-    const _modal = $modalStore[0];
-
-    if (_modal.response) _modal.response(_res);
+    if (_modal.response)
+      _modal.response({
+        tag: _modal.meta.id ? { ...form, id: _modal.meta.id } : _res,
+        type: _modal.meta.id ? 'update' : 'add'
+      });
     modalStore.close();
   }
 </script>
@@ -57,10 +79,11 @@
           <input
             class="input bg-transparent"
             type="text"
-            placeholder="Enter Feed Url"
+            placeholder="Enter Tag Name"
             bind:value={form.name}
           />
           <select class="select" multiple bind:value={form.feedIds}>
+            <option value="__NONE__" class="text-gray-500">None</option>
             {#each $modalStore[0].meta.feedList as feed}
               <option value={feed.id}>{feed.title}</option>
             {/each}

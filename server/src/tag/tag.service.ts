@@ -40,10 +40,12 @@ export class TagService {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return;
 
-    const tag = await this.tagRepo.findOne({
-      where: { id, user: { id } },
-      relations: ['feeds'],
-    });
+    const tag = await this.tagRepo
+      .createQueryBuilder('tag')
+      .where('tag.id = :id', { id })
+      .andWhere('tag.user = :userId', { userId })
+      .leftJoinAndSelect('tag.feeds', 'feed')
+      .getOne();
 
     if (!tag) return;
 
@@ -55,8 +57,9 @@ export class TagService {
     }
 
     const _feeds = await this.feedUserRepo
-      .createQueryBuilder('feed')
-      .where('feed.id IN (:...ids)', { ids: req.feedIds })
+      .createQueryBuilder('feedUser')
+      .where('feedUser.feedId IN (:...ids)', { ids: req.feedIds })
+      .andWhere('feedUser.userId = :userId', { userId })
       .getMany();
 
     if (!_feeds.length) return this.tagRepo.save(tag);
