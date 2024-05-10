@@ -60,14 +60,13 @@
   });
 </script>
 
-<Toast rounded="rounded-none" position="bl" max={4} padding="p-3" buttonDismiss="bg-transparent" />
+<Toast position="bl" max={4} padding="p-3" buttonDismiss="bg-transparent" />
 <Modal components={modalRegistry} />
 <TabGroup
   justify="justify-center"
   active="variant-filled-primary"
   hover="hover:variant-soft-primary"
   flex="flex-1 lg:flex-none"
-  rounded=""
   border=""
   class="bg-surface-100-800-token w-full"
 >
@@ -108,7 +107,7 @@
   {/if}
 </TabGroup>
 {#if $isLoading}
-  <ProgressBar rounded="rounded-none" height="h-[4px]" />
+  <ProgressBar height="h-[4px]" />
 {/if}
 <div class="m-auto flex max-w-4xl flex-1 flex-col overflow-auto max-h-[95vh]">
   <slot />

@@ -82,13 +82,17 @@
             placeholder="Enter Tag Name"
             bind:value={form.name}
           />
-          <select class="select" multiple bind:value={form.feedIds}>
+          <select class="select max-h-[95vh]" multiple bind:value={form.feedIds}>
             <option value="__NONE__" class="text-gray-500">None</option>
             {#each $modalStore[0].meta.feedList as feed}
               <option value={feed.id}>{feed.title}</option>
             {/each}
           </select>
-          <button class="btn variant-filled-primary w-full" on:click={submit} disabled={!form.name}>
+          <button
+            class="btn variant-filled-primary w-full mt-4"
+            on:click={submit}
+            disabled={!form.name}
+          >
             <CheckOutline />
           </button>
         </form>

@@ -14,7 +14,7 @@
 
 <div class="lg:p-4 p-2 flex flex-col justify-center align-middle items-center gap-1">
   {#await getOverview() then data}
-    <Avatar src={data?.avatar ?? ''} width="w-32" rounded="rounded-none" />
+    <Avatar src={data?.avatar ?? ''} width="w-32" />
     <h1>{data?.name}</h1>
     <p>{data?.email}</p>
   {:catch error}

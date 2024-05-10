@@ -15,7 +15,7 @@
 </script>
 
 <div class="w-full lg:p-4 p-2 flex flex-col gap-4 justify-center align-middle items-center">
-  <FileDropzone rounded="rounded-none" name="files" bind:files />
+  <FileDropzone name="files" bind:files />
   <div class="space-y-2 w-full">
     {#each imports as imp}
       <label class="flex items-center space-x-2">

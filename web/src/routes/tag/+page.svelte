@@ -95,7 +95,7 @@
   <nav class="list-nav w-full overflow-y-scroll max-h-[75vh]">
     <ul class="w-full">
       {#each data?.tags?.items ?? [] as tag}
-        <li class="flex items-center justify-between">
+        <li class="flex justify-between">
           <span>{tag.name}</span>
           <div class="flex">
             <button on:click={() => remove(tag.id)} type="button" class="btn bg-initial">
