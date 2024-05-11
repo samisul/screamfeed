@@ -18,7 +18,7 @@ export class FeedMappers {
       id: feedUser.feed.id,
       url: feedUser.feed.url,
       title: feedUser.feed.title,
-      tags: feedUser.tags.map(TagMapper.toTagPreviewDto),
+      tags: feedUser.tags?.map(TagMapper.toTagPreviewDto) ?? [],
     };
   }
 
