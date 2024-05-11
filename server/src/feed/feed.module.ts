@@ -9,11 +9,12 @@ import { FindFeedService } from './find-feed.service';
 import { Feed } from './feed.entity';
 import { FeedCache } from './feed-cache.entity';
 import { FeedUser } from './feed-user.entity';
+import { Tag } from 'src/tag/tag.entity';
 
 @Module({
   imports: [
     HttpModule,
-    DataModule.forFeature([Feed, User, FeedCache, FeedUser]),
+    DataModule.forFeature([Feed, User, FeedCache, FeedUser, Tag]),
   ],
   controllers: [FeedController],
   providers: [FeedService, FeedCacheService, FindFeedService],

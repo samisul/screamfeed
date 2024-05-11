@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { Mark } from '../mark/mark.entity';
 import { Tag } from '../tag/tag.entity';
-import { Feed } from 'src/feed/feed.entity';
 
 @Unique(['email'])
 @Entity()

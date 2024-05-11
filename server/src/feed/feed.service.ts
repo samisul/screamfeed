@@ -19,6 +19,7 @@ import { FeedCacheMappers } from './cache/feed-cache.mappers';
 import { Feed } from './feed.entity';
 import { FeedUser } from './feed-user.entity';
 import { FeedCache } from './feed-cache.entity';
+import { Tag } from 'src/tag/tag.entity';
 
 @Injectable()
 export class FeedService {
@@ -27,6 +28,7 @@ export class FeedService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Feed) private readonly feedRepo: Repository<Feed>,
+    @InjectRepository(Tag) private readonly tagRepo: Repository<Tag>,
     @InjectRepository(FeedUser)
     private readonly feedUserRepo: Repository<FeedUser>,
     private readonly httpService: HttpService,
@@ -64,9 +66,15 @@ export class FeedService {
       });
     }
 
+    const _tags = await this.tagRepo
+      .createQueryBuilder('tag')
+      .where('tag.id IN (:...ids)', { ids: feedDto.tagIds })
+      .getMany();
+
     await this.feedUserRepo.save({
       feed: _feed,
       user: _user,
+      tags: _tags,
     });
 
     return _feed;
