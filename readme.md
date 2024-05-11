@@ -1,8 +1,9 @@
 ### Screenshots
 
+![1](./.github/screenshots/1.png)
+![2](./.github/screenshots/2.png)
 ![3](./.github/screenshots/3.png)
 ![4](./.github/screenshots/4.png)
-![5](./.github/screenshots/5.png)
 
 ### Features
 
@@ -13,10 +14,10 @@
 - [x] mark feed items & view them
 - [x] list available feeds added by other users
 - [x] search feeds
-- [ ] categorize feeds
+- [x] categorize feeds
 - [ ] snapshot item as image
 - [x] tool to fetch rss feeds from popular websites (e.g. reddit, youtube, etc.)
-- [ ] settings menu to hide stuff like search bar, mark button, mark page, etc.
+- [x] settings menu to hide stuff like search bar, mark button, mark page, etc.
       **_... more to come ..._**
 
 ### Self-hosting
