@@ -146,6 +146,8 @@
                 {/if}
                 <span class="capitalize">{f}</span>
               </button>
+            {:else}
+              <div class="text-center text-gray-500">No Tags.</div>
             {/each}
           </div>
         </svelte:fragment>
