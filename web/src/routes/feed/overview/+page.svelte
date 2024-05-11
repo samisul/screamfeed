@@ -25,7 +25,7 @@
   let searchEl: HTMLInputElement | undefined = undefined;
   let items: GenericFeed[] = [];
   let filters: Record<string, boolean> =
-    data?.tags?.items.reduce((acc, tag) => ({ ...acc, [tag.name]: true }), {}) ?? {};
+    data?.tags?.items.reduce((acc, tag) => ({ ...acc, [tag.name]: false }), {}) ?? {};
 
   const toastStore = getToastStore();
 
@@ -51,14 +51,13 @@
 
   async function toggle(f: string): Promise<void> {
     filters[f] = !filters[f];
-    if (Object.values(filters).every((f) => !f)) return;
 
-    console.log(data?.feeds);
     const _urlsToFetch =
-      data?.feeds?.items.filter((f) => f.tags.some((t) => filters[t.name])) ?? [];
+      data?.feeds?.items.filter((f) => f.tags.some((t) => filters[t.name])) ?? undefined;
 
-    console.log(_urlsToFetch);
-    items = (await getParsedFeeds(_urlsToFetch.map((f) => f.url)))?.items ?? [];
+    items =
+      (await getParsedFeeds(!_urlsToFetch?.length ? undefined : _urlsToFetch?.map((f) => f.url)))
+        ?.items ?? [];
   }
 
   function onSearchSubmit() {

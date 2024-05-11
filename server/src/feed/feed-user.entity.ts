@@ -20,7 +20,7 @@ export class FeedUser {
   @Column()
   feedId: string;
 
-  @ManyToMany(() => Tag, (tag) => tag.feeds)
+  @ManyToMany(() => Tag, (tag) => tag.feeds, { onDelete: 'CASCADE' })
   tags: Tag[];
 
   @ManyToMany(() => User, (user) => user.feeds, { onDelete: 'CASCADE' })

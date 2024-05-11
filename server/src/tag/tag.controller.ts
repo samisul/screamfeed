@@ -25,7 +25,6 @@ export class TagController {
     @Req() req: Request & { user: JwtPayload },
   ): Promise<ListRes<TagPreviewDto>> {
     const _tags = await this.tagService.get(req.user.sub);
-    console.log(_tags);
     return { items: _tags };
   }
 
