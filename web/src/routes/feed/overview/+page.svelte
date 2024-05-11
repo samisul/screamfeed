@@ -52,12 +52,19 @@
   async function toggle(f: string): Promise<void> {
     filters[f] = !filters[f];
 
-    const _urlsToFetch =
-      data?.feeds?.items.filter((f) => f.tags.some((t) => filters[t.name])) ?? undefined;
+    const _urlsToFetch = data?.feeds?.items.filter((f) => f.tags.some((t) => filters[t.name]));
+    const _shouldApplyFilters = Object.values(filters).some((f) => f);
 
+    $isLoading = true;
     items =
-      (await getParsedFeeds(!_urlsToFetch?.length ? undefined : _urlsToFetch?.map((f) => f.url)))
-        ?.items ?? [];
+      (
+        await getParsedFeeds(
+          !_urlsToFetch?.length && !_shouldApplyFilters
+            ? undefined
+            : _urlsToFetch?.map((f) => f.url)
+        )
+      )?.items ?? [];
+    $isLoading = false;
   }
 
   function onSearchSubmit() {
