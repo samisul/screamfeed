@@ -21,6 +21,7 @@
   import UpsertTag from './tag/components/UpsertTag.svelte';
   import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
   import { storePopup } from '@skeletonlabs/skeleton';
+  import SelectTag from './feed/list/components/SelectTag.svelte';
 
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
   initModalStore();
@@ -28,7 +29,8 @@
 
   const modalRegistry: Record<string, ModalComponent> = {
     feedItemContent: { ref: FeedItemContent },
-    upsertTag: { ref: UpsertTag }
+    upsertTag: { ref: UpsertTag },
+    selectTag: { ref: SelectTag }
   };
 
   onMount(() => {

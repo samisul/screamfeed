@@ -42,7 +42,10 @@ export function logout(): void {
 
 export async function refresh(): Promise<void> {
   const _tokens = extractTokensFromCookie();
-  if (!_tokens) return;
+  if (!_tokens) {
+    logout();
+    return;
+  }
   const _refreshed = await get<AuthCookie>(`${USER_URL}/refresh`);
   if (!_refreshed) {
     logout();

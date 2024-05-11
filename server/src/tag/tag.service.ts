@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FeedUser } from 'src/feed/feed-user.entity';
 import { User } from 'src/user/user.entity';
@@ -16,7 +16,7 @@ export class TagService {
     private readonly feedUserRepo: Repository<FeedUser>,
   ) {}
 
-  async add(userId: string, req: UpsertTagReq) {
+  async add(userId: string, req: UpsertTagReq): Promise<Tag> {
     const _feeds = req.feedIds.length
       ? await this.feedUserRepo
           .createQueryBuilder('feedUser')
@@ -24,6 +24,12 @@ export class TagService {
           .andWhere('feedUser.userId = :userId', { userId })
           .getMany()
       : [];
+
+    const _tag = await this.tagRepo.findOne({
+      where: { name: req.name, user: { id: userId } },
+    });
+
+    if (_tag) throw new HttpException('Tag already exists', 400);
 
     const newTag = this.tagRepo.create({
       name: req.name,

@@ -18,16 +18,18 @@ export async function get<T>(url: string): Promise<T | undefined> {
 
 export async function post<T>(url: string, body: unknown): Promise<T | undefined> {
   try {
-    return (
-      await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      })
-    ).json() as T;
+    const _res = await fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!_res.ok) return undefined;
+
+    return _res.json() as T;
   } catch {
     return undefined;
   }

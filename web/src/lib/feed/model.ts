@@ -10,6 +10,7 @@ export interface FeedDto {
 export interface AddFeedReq {
   url: string;
   title: string;
+  tagIds: string[];
 }
 
 export interface GenericFeed {

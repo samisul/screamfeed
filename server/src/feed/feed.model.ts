@@ -3,6 +3,7 @@ import { TagPreviewDto } from 'src/tag/tag.model';
 export interface AddFeedReq {
   url: string;
   title: string;
+  tagIds: string[];
 }
 
 interface RSSFeedRes {
