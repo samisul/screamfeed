@@ -24,10 +24,10 @@ export async function removeFeed(id: string): Promise<boolean> {
   return await del(`${FEED_URL}/${id}`);
 }
 
-export async function list(): Promise<ListRes<FeedDto> | undefined> {
+export async function getFeedsList(): Promise<ListRes<FeedDto> | undefined> {
   return await get<ListRes<FeedDto>>(`${FEED_URL}/list`);
 }
 
-export async function find(url: string): Promise<ListRes<string> | undefined> {
+export async function findFeed(url: string): Promise<ListRes<string> | undefined> {
   return await get<ListRes<string>>(`${FEED_URL}/find?url=${url}`);
 }

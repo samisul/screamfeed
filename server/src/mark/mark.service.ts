@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Mark } from 'src/core/entities/mark.entity';
+import { Mark } from 'src/mark/mark.entity';
 import { Repository } from 'typeorm';
 import { AddMarkDto, MarkDto } from './mark.model';
 import { MarkMappers } from './mark.mappers';

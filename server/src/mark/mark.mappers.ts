@@ -1,4 +1,4 @@
-import { Mark } from 'src/core/entities/mark.entity';
+import { Mark } from 'src/mark/mark.entity';
 import { MarkDto } from './mark.model';
 
 export class MarkMappers {

@@ -1,3 +1,18 @@
+export interface UserOverview {
+  name: string;
+  email: string;
+  avatar: string;
+  feedCount: number;
+  marksCount: number;
+}
+
+export interface UserModel {
+  name: string;
+  email: string;
+  avatar: string;
+  createdAt: Date;
+}
+
 export const roles = ['admin', 'user'] as const;
 export type Role = (typeof roles)[number];
 

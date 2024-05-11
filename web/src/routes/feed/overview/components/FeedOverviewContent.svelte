@@ -4,7 +4,7 @@
   import { truncateString } from '$lib/helpers';
   import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import { createEventDispatcher } from 'svelte';
-  import { prefs } from '../../../stores/prefs.store';
+  import { prefs } from '../../../../stores/prefs.store';
 
   export let feed: GenericFeed;
 

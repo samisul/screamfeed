@@ -11,7 +11,6 @@
 
   onMount(() => {
     prefs = load();
-    console.log(prefs);
     form = { ...prefs };
   });
 

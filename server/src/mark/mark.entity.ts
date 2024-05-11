@@ -1,6 +1,6 @@
 import { GenericFeedItem } from 'src/feed/feed.model';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Mark {

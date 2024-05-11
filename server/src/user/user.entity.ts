@@ -1,14 +1,14 @@
+import { FeedUser } from 'src/feed/feed-user.entity';
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { Feed } from './feed/feed.entity';
-import { Mark } from './mark.entity';
+import { Mark } from '../mark/mark.entity';
+import { Tag } from '../tag/tag.entity';
+import { Feed } from 'src/feed/feed.entity';
 
 @Unique(['email'])
 @Entity()
@@ -25,12 +25,14 @@ export class User {
   @Column({ type: 'varchar' })
   avatar: string;
 
-  @JoinTable()
-  @ManyToMany(() => Feed, (feed) => feed.users)
-  feeds: Feed[];
+  @OneToMany(() => FeedUser, (fu) => fu.feed)
+  feeds: FeedUser[];
 
   @OneToMany(() => Mark, (mark) => mark.user)
   marks: Mark[];
+
+  @OneToMany(() => Tag, (tag) => tag.user)
+  tags: Tag[];
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

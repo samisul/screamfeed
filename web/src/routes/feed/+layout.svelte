@@ -10,7 +10,6 @@
     active="variant-filled-primary"
     hover="hover:variant-soft-primary"
     flex="flex-1 lg:flex-none"
-    rounded=""
     border=""
     class=" w-full"
   >

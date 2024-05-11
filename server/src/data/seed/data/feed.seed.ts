@@ -120,16 +120,6 @@ export const feedSeed = [
     url: 'https://boards.4chan.org/c/index.rss',
   },
   {
-    id: '32c908bf-f110-4c7a-81d7-caf0008c71b0',
-    title: '/d/ - Hentai/Alternative',
-    url: 'https://boards.4chan.org/d/index.rss',
-  },
-  {
-    id: '43c908bf-f110-4c7a-81d7-caf0008c71b0',
-    title: '/e/ - Ecchi',
-    url: 'https://boards.4chan.org/e/index.rss',
-  },
-  {
     id: '53c908bf-f110-4c7a-81d7-caf0008c71b0',
     title: '/f/ - Flash',
     url: 'https://boards.4chan.org/f/index.rss',
@@ -138,16 +128,6 @@ export const feedSeed = [
     id: '63c908bf-f110-4c7a-81d7-caf0008c71b0',
     title: '/g/ - Technology',
     url: 'https://boards.4chan.org/g/index.rss',
-  },
-  {
-    id: '73c908bf-f110-4c7a-81d7-caf0008c71b0',
-    title: '/gif/ - Adult GIF',
-    url: 'https://boards.4chan.org/gif/index.rss',
-  },
-  {
-    id: '83c908bf-f110-4c7a-81d7-caf0008c71b0',
-    title: '/h/ - Hentai',
-    url: 'https://boards.4chan.org/h/index.rss',
   },
   {
     id: '93c908bf-f110-4c7a-81d7-caf0008c71b0',

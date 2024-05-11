@@ -1,19 +1,25 @@
-import { Feed } from 'src/core/entities/feed/feed.entity';
+import { Helpers } from 'src/core/helpers';
+import { TagMapper } from 'src/tag/tag.mappers';
+import { FeedUser } from './feed-user.entity';
 import type {
-  RSSFeed,
-  RSSFeedItem,
-  AtomFeedEntry,
   AtomFeed,
-  GenericFeedItem,
+  AtomFeedEntry,
+  FeedDto,
   FeedRes,
   GenericFeed,
+  GenericFeedItem,
+  RSSFeed,
+  RSSFeedItem,
 } from './feed.model';
-import { FeedDto } from 'src/core/dtos/feed.dto';
-import { Helpers } from 'src/core/helpers';
 
 export class FeedMappers {
-  static toFeedDto(feed: Feed): FeedDto {
-    return { id: feed.id, url: feed.url, title: feed.title };
+  static toFeedDto(feedUser: FeedUser): FeedDto {
+    return {
+      id: feedUser.feed.id,
+      url: feedUser.feed.url,
+      title: feedUser.feed.title,
+      tags: feedUser.tags?.map(TagMapper.toTagPreviewDto) ?? [],
+    };
   }
 
   static toGenericFeed(feed: FeedRes, feedUrl: string): GenericFeed {

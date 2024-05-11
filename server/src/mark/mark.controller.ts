@@ -8,12 +8,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { JwtPayload } from 'src/core/auth.model';
-import { ListRes } from 'src/core/dtos/global.dto';
+import { ListRes } from 'src/core/core.model';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { AddMarkDto, MarkDto } from './mark.model';
 import { MarkService } from './mark.service';
-import { Mark } from 'src/core/entities/mark.entity';
+import { Mark } from 'src/mark/mark.entity';
+import { JwtPayload } from 'src/user/user.model';
 
 @UseGuards(LoggedInGuard)
 @Controller('marks')

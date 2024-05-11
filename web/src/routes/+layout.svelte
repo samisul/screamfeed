@@ -6,23 +6,31 @@
     PenNibSolid,
     NewspaperSolid,
     MapPinSolid,
-    CogSolid
+    CogSolid,
+    TagSolid
   } from 'flowbite-svelte-icons';
   import { page } from '$app/stores';
   import { isLoading } from '../stores/global.store';
   import { initializeStores as initModalStore, Modal } from '@skeletonlabs/skeleton';
-  import FeedItemContent from './feed/components/FeedItemContent.svelte';
+  import FeedItemContent from './feed/overview/components/FeedItemContent.svelte';
   import { initializeStores as initToastStore, Toast } from '@skeletonlabs/skeleton';
   import { isLoggedIn } from '../stores/user.store';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { prefs } from '../stores/prefs.store';
+  import UpsertTag from './tag/components/UpsertTag.svelte';
+  import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+  import { storePopup } from '@skeletonlabs/skeleton';
+  import SelectTag from './feed/list/components/SelectTag.svelte';
 
+  storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
   initModalStore();
   initToastStore();
 
   const modalRegistry: Record<string, ModalComponent> = {
-    feedItemContent: { ref: FeedItemContent }
+    feedItemContent: { ref: FeedItemContent },
+    upsertTag: { ref: UpsertTag },
+    selectTag: { ref: SelectTag }
   };
 
   onMount(() => {
@@ -43,6 +51,9 @@
           }
           break;
         case '5':
+          goto('/tag');
+          break;
+        case '6':
           goto('/feed/find');
           break;
       }
@@ -54,14 +65,13 @@
   });
 </script>
 
-<Toast rounded="rounded-none" position="bl" max={4} padding="p-3" buttonDismiss="bg-transparent" />
+<Toast position="bl" max={4} padding="p-3" buttonDismiss="bg-transparent" />
 <Modal components={modalRegistry} />
 <TabGroup
   justify="justify-center"
   active="variant-filled-primary"
   hover="hover:variant-soft-primary"
   flex="flex-1 lg:flex-none"
-  rounded=""
   border=""
   class="bg-surface-100-800-token w-full"
 >
@@ -84,6 +94,11 @@
         </svelte:fragment>
       </TabAnchor>
     {/if}
+    <TabAnchor href="/tag" selected={$page.url.pathname.includes('/tag')}>
+      <svelte:fragment slot="lead">
+        <TagSolid></TagSolid>
+      </svelte:fragment>
+    </TabAnchor>
     <TabAnchor
       href="/feed/find"
       selected={$page.url.pathname.includes('/feed/find') ||
@@ -97,7 +112,7 @@
   {/if}
 </TabGroup>
 {#if $isLoading}
-  <ProgressBar rounded="rounded-none" height="h-[4px]" />
+  <ProgressBar height="h-[4px]" />
 {/if}
 <div class="m-auto flex max-w-4xl flex-1 flex-col overflow-auto max-h-[95vh]">
   <slot />

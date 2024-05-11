@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FeedCache } from 'src/core/entities/feed/feed-cache.entity';
 import { Repository } from 'typeorm';
 import { GenericFeed } from '../feed.model';
 import { FeedCacheMappers } from './feed-cache.mappers';
+import { FeedCache } from '../feed-cache.entity';
 
 @Injectable()
 export class FeedCacheService {

@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import { Feed } from 'src/core/entities/feed/feed.entity';
-import { User } from 'src/core/entities/user.entity';
+import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import {
   GenericFeed,
@@ -10,14 +9,16 @@ import {
   RSSFeed,
   AtomFeed,
   AddFeedReq,
+  FeedDto,
 } from './feed.model';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { FeedMappers } from './feed.mappers';
-import { FeedDto } from 'src/core/dtos/feed.dto';
 import { FeedCacheService } from './cache/feed-cache.service';
 import { FeedCacheMappers } from './cache/feed-cache.mappers';
-import { FeedCache } from 'src/core/entities/feed/feed-cache.entity';
+import { Feed } from './feed.entity';
+import { FeedUser } from './feed-user.entity';
+import { FeedCache } from './feed-cache.entity';
 
 @Injectable()
 export class FeedService {
@@ -26,6 +27,8 @@ export class FeedService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Feed) private readonly feedRepo: Repository<Feed>,
+    @InjectRepository(FeedUser)
+    private readonly feedUserRepo: Repository<FeedUser>,
     private readonly httpService: HttpService,
     private readonly feedCacheService: FeedCacheService,
   ) {}
@@ -33,64 +36,63 @@ export class FeedService {
   async list(userId: string): Promise<FeedDto[]> {
     const _userFeeds = await this.get(userId);
 
-    const _feedsTheUserDoesntHave = await this.feedRepo
-      .createQueryBuilder('feed')
-      .leftJoinAndSelect('feed.users', 'user')
+    const _feedsTheUserDoesntHave = await this.feedUserRepo
+      .createQueryBuilder('feedUser')
+      .leftJoinAndSelect('feedUser.feed', 'feed')
+      .leftJoinAndSelect('feedUser.user', 'user')
+      .leftJoinAndSelect('feedUser.tags', 'tags')
+      .where('user.id != :id', { id: userId })
       .getMany();
 
     return _feedsTheUserDoesntHave
-      .filter((f) => !_userFeeds.map((uf) => uf.url).includes(f.url))
+      .filter((f) => !_userFeeds.map((uf) => uf.url).includes(f.feed.url))
       .map((f) => FeedMappers.toFeedDto(f));
   }
 
   async add(feedDto: AddFeedReq, userId: string): Promise<Feed | undefined> {
-    const user = await this.userRepo.findOne({ where: { id: userId } });
-    if (!user) return;
+    const _user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!_user) return;
 
-    const feed = await this.feedRepo.findOne({
-      where: { url: feedDto.url, title: feedDto.title },
-      relations: ['users'],
+    let _feed = await this.feedRepo.findOne({
+      where: { url: feedDto.url },
     });
 
-    if (!feed) {
-      const newFeed = this.feedRepo.create();
-      newFeed.url = feedDto.url;
-      newFeed.title = feedDto.title;
-      newFeed.users = [user];
-      return this.feedRepo.save(newFeed);
+    if (!_feed) {
+      _feed = await this.feedRepo.save({
+        url: feedDto.url,
+        title: feedDto.title,
+      });
     }
 
-    feed.users.push(user);
-    return this.feedRepo.save(feed);
+    await this.feedUserRepo.save({
+      feed: _feed,
+      user: _user,
+    });
+
+    return _feed;
   }
 
   async remove(feedId: string, userId: string): Promise<void> {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return;
 
-    const feed = await this.feedRepo.findOne({
-      where: { id: feedId },
-      relations: ['users'],
-    });
-    if (!feed) return;
-
-    feed.users = feed.users.filter((u) => u.id !== user.id);
-
-    if (!feed.users.length) {
-      await this.feedRepo.remove(feed);
-      return;
-    }
-
-    await this.feedRepo.save(feed);
+    await this.feedUserRepo
+      .createQueryBuilder('feedUser')
+      .delete()
+      .where('feed.id = :id', { id: feedId })
+      .andWhere('user.id = :userId', { userId })
+      .execute();
   }
 
   async get(userId: string): Promise<FeedDto[]> {
-    const user = await this.userRepo.findOne({ where: { id: userId } });
-    if (!user) return [];
+    const _user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!_user) return [];
 
-    const _feeds = await this.feedRepo
-      .createQueryBuilder('feed')
-      .leftJoin('feed.users', 'user')
+    const _feeds = await this.feedUserRepo
+      .createQueryBuilder('feedUser')
+      .leftJoinAndSelect('feedUser.feed', 'feed')
+      .leftJoinAndSelect('feedUser.user', 'user')
+      .leftJoinAndSelect('feedUser.tags', 'tags')
       .where('user.id = :id', { id: userId })
       .orderBy('feed.createdAt', 'DESC')
       .getMany();
@@ -104,22 +106,22 @@ export class FeedService {
     feedURLs?: string[],
   ): Promise<GenericFeed[]> {
     const _cachedFeeds: FeedCache[] = [];
-    let _feeds = feedURLs ?? (await this.get(userId)).map((f) => f.url);
+    let _feedUrls = feedURLs ?? (await this.get(userId)).map((f) => f.url);
 
-    if (!_feeds.length) return [];
+    if (!_feedUrls.length) return [];
 
     if (refresh === false)
       _cachedFeeds.push(
-        ...((await this.feedCacheService.getCachesByFeedUrls(_feeds)) ?? []),
+        ...((await this.feedCacheService.getCachesByFeedUrls(_feedUrls)) ?? []),
       );
 
     if (_cachedFeeds.length)
-      _feeds = _feeds.filter(
+      _feedUrls = _feedUrls.filter(
         (f) => !_cachedFeeds.map((cf) => cf.feedUrl).includes(f),
       );
 
     const _parsedFeedsToCache: { url: string; parsedFeed: GenericFeed }[] = [];
-    const _parsedFeeds = (await this.getFeedsFromURLs(_feeds))
+    const _parsedFeeds = (await this.getFeedsFromURLs(_feedUrls))
       .map((feed) => {
         const _parsedFeed = this.parser.parse(feed.feed ?? '');
         if (this.isRSSFeed(_parsedFeed))
