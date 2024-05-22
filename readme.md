@@ -22,6 +22,9 @@
 
 ### Self-hosting
 
-TODO: add instructions
+```bash
+$ curl -o .env "https://raw.githubusercontent.com/samisul/screamfeed/dev/.example.env" && curl -o docker-compose.yaml "https://raw.githubusercontent.com/samisul/screamfeed/dev/docker-compose.prod.yaml"
+$ docker-compose up -d # after editing .env
+```
 
 > name inspired by [Archspire - Scream Feeding](https://www.youtube.com/watch?v=xg8OPdc0wI8) <3
