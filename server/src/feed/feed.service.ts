@@ -66,6 +66,15 @@ export class FeedService {
       });
     }
 
+    if (!feedDto.tagIds.length) {
+      await this.feedUserRepo.save({
+        feed: _feed,
+        user: _user,
+      });
+
+      return _feed;
+    }
+
     const _tags = await this.tagRepo
       .createQueryBuilder('tag')
       .where('tag.id IN (:...ids)', { ids: feedDto.tagIds })
