@@ -36,7 +36,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "fast-xml-parser": "^4.4.0",
-    "mysql2": "^3.9.4",
+    "mysql2": "^3.9.8",
     "node-html-parser": "^6.1.13",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
