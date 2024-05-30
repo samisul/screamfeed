@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginResDto } from '../auth.model';
+import { LoginResDto } from 'src/user/user.model';
 
 @Injectable()
 export class LoggedInGuard implements CanActivate {
@@ -39,6 +39,6 @@ export class LoggedInGuard implements CanActivate {
   private exteatTokenFromCookie(
     req: Request & { cookies: Record<string, string> },
   ): LoginResDto {
-    return JSON.parse(req.cookies['SCREAMFEED_TOKENS']);
+    return JSON.parse(req.cookies['SCREAMFEED_TOKENS'] ?? '{}');
   }
 }

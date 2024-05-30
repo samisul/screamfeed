@@ -1,6 +1,9 @@
+import { TagPreviewDto } from 'src/tag/tag.model';
+
 export interface AddFeedReq {
   url: string;
   title: string;
+  tagIds: string[];
 }
 
 interface RSSFeedRes {
@@ -59,6 +62,7 @@ export interface GenericFeed {
   language?: string;
   updated?: string;
   items: GenericFeedItem[];
+  feedUrl: string;
 }
 
 export interface GenericFeedItem {
@@ -66,5 +70,12 @@ export interface GenericFeedItem {
   title: string;
   link: string;
   content: string;
-  data: string;
+  date: string;
+}
+
+export interface FeedDto {
+  id: string;
+  url: string;
+  title: string;
+  tags: TagPreviewDto[];
 }

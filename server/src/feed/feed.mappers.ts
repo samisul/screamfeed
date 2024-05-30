@@ -1,21 +1,28 @@
-import { Feed } from 'src/core/entities/feed.entity';
+import { Helpers } from 'src/core/helpers';
+import { TagMapper } from 'src/tag/tag.mappers';
+import { FeedUser } from './feed-user.entity';
 import type {
-  RSSFeed,
-  RSSFeedItem,
-  AtomFeedEntry,
   AtomFeed,
-  GenericFeedItem,
+  AtomFeedEntry,
+  FeedDto,
   FeedRes,
   GenericFeed,
+  GenericFeedItem,
+  RSSFeed,
+  RSSFeedItem,
 } from './feed.model';
-import { FeedDto } from 'src/core/dtos/feed.dto';
 
 export class FeedMappers {
-  static toFeedDto(feed: Feed): FeedDto {
-    return { id: feed.id, url: feed.url, title: feed.title };
+  static toFeedDto(feedUser: FeedUser): FeedDto {
+    return {
+      id: feedUser.feed.id,
+      url: feedUser.feed.url,
+      title: feedUser.feed.title,
+      tags: feedUser.tags?.map(TagMapper.toTagPreviewDto) ?? [],
+    };
   }
 
-  static toGenericFeed(feed: FeedRes): GenericFeed {
+  static toGenericFeed(feed: FeedRes, feedUrl: string): GenericFeed {
     if (feed.type === 'rss')
       return {
         title: feed.feed.rss.channel.title,
@@ -25,6 +32,7 @@ export class FeedMappers {
         items: feed.feed.rss.channel.item.map(
           FeedMappers.rssFeedItemToGenericFeedItem,
         ),
+        feedUrl,
       };
     if (feed.type === 'atom')
       return {
@@ -34,6 +42,7 @@ export class FeedMappers {
         items: feed.feed.feed.entry.map(
           FeedMappers.atomFeedEntryToGenericFeedItem,
         ),
+        feedUrl,
       };
     throw new Error('Unsupported feed type');
   }
@@ -46,7 +55,7 @@ export class FeedMappers {
           link: feed.rss.channel.link,
           description: feed.rss.channel.description,
           language: feed.rss.channel.language,
-          item: feed.rss.channel.item.map(FeedMappers.toRSSFeedItem),
+          item: [feed.rss.channel.item].flat().map(FeedMappers.toRSSFeedItem),
         },
       },
     };
@@ -67,7 +76,7 @@ export class FeedMappers {
     return {
       title: item.title,
       link: item.link,
-      content: item['content:encoded'],
+      content: item['content:encoded'] ?? item.description,
       pubDate: item.pubDate,
       guid: item.guid,
     };
@@ -76,7 +85,7 @@ export class FeedMappers {
   private static toAtomFeedEntry(entry: any): AtomFeedEntry {
     return {
       title: entry.title,
-      link: entry.link,
+      link: typeof entry.link === 'string' ? entry.link : entry.link['@_href'],
       id: entry.id,
       updated: entry.updated,
       summary: entry.content ?? entry.summary,
@@ -91,19 +100,25 @@ export class FeedMappers {
       title: item.title,
       link: item.link,
       content: item.content,
-      data: item.pubDate,
+      date: item.pubDate,
     };
   }
 
   private static atomFeedEntryToGenericFeedItem(
     entry: AtomFeedEntry,
   ): GenericFeedItem {
+    // todo: is this retarded?
+    let content = '';
+    if (typeof entry.summary === 'object')
+      content = Helpers.findHTMLProp(entry.summary);
+    else if (typeof entry.summary === 'string') content = entry.summary;
+
     return {
       id: entry.id,
       title: entry.title,
       link: entry.link,
-      content: entry.summary,
-      data: entry.updated,
+      content: content,
+      date: entry.updated,
     };
   }
 }

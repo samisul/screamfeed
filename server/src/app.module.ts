@@ -1,11 +1,12 @@
 import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
+import { env } from 'process';
 import { DataModule } from './data/data.module';
 import { SeedService } from './data/seed/seed.service';
-import { env } from 'process';
-import { UserModule } from './user/user.module';
 import { FeedModule } from './feed/feed.module';
 import { MarkModule } from './mark/mark.module';
+import { TagModule } from './tag/tag.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -18,18 +19,15 @@ import { MarkModule } from './mark/mark.module';
       isGlobal: true,
     }),
     MarkModule,
+    TagModule,
   ],
   controllers: [],
   providers: [SeedService, Logger],
 })
 export class AppModule implements OnApplicationBootstrap {
-  constructor(
-    private readonly seedService: SeedService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly seedService: SeedService) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    const _IS_DEV_MODE = this.configService.get('NODE_ENV') === 'dev';
-    if (_IS_DEV_MODE) await this.seedService.seed();
+    await this.seedService.seed();
   }
 }

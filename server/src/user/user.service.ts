@@ -1,11 +1,9 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload, LoginResDto } from '../core/auth.model';
-import { UserModel } from '../core/dtos/user.dto';
-import { User } from 'src/core/entities/user.entity';
+import { User } from 'src/user/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserOverview } from './user.dto';
+import { JwtPayload, LoginResDto, UserModel, UserOverview } from './user.model';
 
 @Injectable()
 export class UserService {
@@ -37,6 +35,9 @@ export class UserService {
     }
 
     if (_tokenPayload.type !== 'refresh')
+      throw new HttpException('INVALID_PAYLOAD', HttpStatus.BAD_REQUEST);
+
+    if (!_tokenPayload.sub)
       throw new HttpException('INVALID_PAYLOAD', HttpStatus.BAD_REQUEST);
 
     return await this.signTokens(

@@ -1,11 +1,6 @@
 <script>
-  import { navigateToGoogleOAuth, login, navigateToGithubOAuth } from '$lib/user';
+  import { navigateToGoogleOAuth, navigateToGithubOAuth } from '$lib/user';
   import { GithubSolid, GoogleSolid } from 'flowbite-svelte-icons';
-  import { onMount } from 'svelte';
-
-  onMount(() => {
-    login();
-  });
 
   function onNavToGithub() {
     navigateToGithubOAuth();

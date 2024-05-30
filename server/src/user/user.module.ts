@@ -8,7 +8,7 @@ import { GoogleStrategy } from './google.strategy';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { DataModule } from 'src/data/data.module';
-import { User } from 'src/core/entities/user.entity';
+import { User } from 'src/user/user.entity';
 
 @Module({
   imports: [
