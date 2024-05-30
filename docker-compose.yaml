@@ -2,15 +2,13 @@ version: "3"
 
 services:
   nest:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: mmayss/screamfeed_server:main
     container_name: nest
     restart: unless-stopped
     environment:
       - DB_HOST=db
     env_file:
-      - ./server/.env
+      - ./.env
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:
@@ -19,14 +17,11 @@ services:
       - screamfeed_network
 
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
+    image: mmayss/screamfeed_web:main
     container_name: web
     restart: unless-stopped
     environment:
       - PORT=4200
-      - PUBLIC_BASE_URL=http://localhost:3000/api
     ports:
       - "127.0.0.1:4200:4200"
     expose:
