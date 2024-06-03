@@ -415,10 +415,10 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
-"@skeletonlabs/skeleton@2.9.2":
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/@skeletonlabs/skeleton/-/skeleton-2.9.2.tgz#775f5faa0c6adbf2a6709ec5ab0b3a17e7551514"
-  integrity sha512-yBRSyxx9eyLsQXqEuYb5YyqE+CY+IfyTroaqfQ4OmqDcIulMivqU7lY58bmLMGHC/g9lzliFkeY4UO4ssaWVpA==
+"@skeletonlabs/skeleton@2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@skeletonlabs/skeleton/-/skeleton-2.10.0.tgz#b271d22264ed2422a82a386d7a5f2d3ccbc7f14d"
+  integrity sha512-jPdDT9PCkGmlUgsgNvR99bK6N2pWG2GfdapwWqDVZkKIhTsLz4TeJNF3H26Pfkicoj4hNz486+WYa7iSpbn80g==
   dependencies:
     esm-env "1.0.0"
 
