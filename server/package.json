@@ -57,7 +57,7 @@
     "@types/passport-github2": "^1.2.9",
     "@types/passport-google-oauth2": "^0.1.8",
     "@types/supertest": "^6.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.12.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
     "@typescript-eslint/parser": "^7.10.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
