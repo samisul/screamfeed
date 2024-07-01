@@ -47,7 +47,7 @@
   "type": "module",
   "dependencies": {
     "@floating-ui/dom": "^1.6.5",
-    "@sveltejs/adapter-node": "^5.0.1",
+    "@sveltejs/adapter-node": "^5.2.0",
     "highlight.js": "11.9.0"
   }
 }
